@@ -9,8 +9,8 @@ const user = {
     name: '',
     welcome: '',
     avatar: '',
-    roles: [],
-    info: {}
+    permissions: [],
+    info: undefined
   },
 
   mutations: {
@@ -24,8 +24,8 @@ const user = {
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
     },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
+    SET_PERMISSIONS: (state, permissions) => {
+      state.permissions = permissions
     },
     SET_INFO: (state, info) => {
       state.info = info
@@ -59,7 +59,7 @@ const user = {
           const user = ret.data
 
           if (user.resources.length > 0) {
-            commit('SET_ROLES', user.resources)
+            commit('SET_PERMISSIONS', user.resources)
           }
 
           commit('SET_INFO', user)
@@ -81,6 +81,7 @@ const user = {
           if (ret.success) {
             commit('SET_TOKEN', '')
             commit('SET_ROLES', [])
+            commit('SET_INFO', undefined)
             Vue.ls.remove(ACCESS_TOKEN)
           } else {
             console.error(res)
