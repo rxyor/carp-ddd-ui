@@ -85,11 +85,16 @@ const user = {
     // 登出
     Logout ({ commit, state }) {
       return new Promise((resolve) => {
-        commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
-        Vue.ls.remove(ACCESS_TOKEN)
-
-        logout(state.token).then(() => {
+        logout().then((res) => {
+          const ret = { success: undefined, msg: undefined, data: undefined }
+          Object.assign(ret, res)
+          if (ret.success) {
+            commit('SET_TOKEN', '')
+            commit('SET_ROLES', [])
+            Vue.ls.remove(ACCESS_TOKEN)
+          } else {
+            console.error(res)
+          }
           resolve()
         }).catch(() => {
           resolve()

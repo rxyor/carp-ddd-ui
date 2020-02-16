@@ -89,7 +89,7 @@ module.exports = {
     // development server port 8000
     port: 8000,
     proxy: {
-      '/api/oauth2/token/access': {
+      '/api/oauth2/*': {
         target: 'http://carp-auth:8002',
         ws: false,
         changeOrigin: true,
