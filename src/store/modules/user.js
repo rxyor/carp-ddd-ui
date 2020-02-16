@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { login, getInfo, logout } from '@/api/login'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { ACCESS_TOKEN, ACCESS_TOKEN_EXPIRED } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
 const user = {
@@ -36,10 +36,12 @@ const user = {
     // 登录
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
-        login(userInfo).then(response => {
-          const accessToken = response.access_token
-          console.log('response:', response)
-          Vue.ls.set(ACCESS_TOKEN, accessToken, 7 * 24 * 60 * 60 * 1000)
+        login(userInfo).then(res => {
+          const ret = { success: undefined, data: { access_token: undefined, refresh_token: undefined }, msg: undefined }
+          Object.assign(ret, res)
+          const accessToken = ret.data.access_token
+          // 存储TOKEN到Cookie
+          Vue.ls.set(ACCESS_TOKEN, accessToken, ACCESS_TOKEN_EXPIRED)
           commit('SET_TOKEN', accessToken)
           resolve()
         }).catch(error => {

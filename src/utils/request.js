@@ -1,18 +1,17 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
+import notification from 'ant-design-vue/es/notification'
 import {
   VueAxios
 } from './axios'
-import notification from 'ant-design-vue/es/notification'
 import {
   ACCESS_TOKEN
 } from '@/store/mutation-types'
 
-// 创建 axios 实例
 const service = axios.create({
-  baseURL: '/api', // api base_url
-  timeout: 6000 // 请求超时时间
+  baseURL: '/api',
+  timeout: 6000
 })
 
 const err = (error) => {

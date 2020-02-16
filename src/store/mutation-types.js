@@ -1,4 +1,5 @@
 export const ACCESS_TOKEN = 'Access-Token'
+export const ACCESS_TOKEN_EXPIRED = 86400000
 export const REFRESH_TOKEN = 'Refresh-Token'
 export const SIDEBAR_TYPE = 'SIDEBAR_TYPE'
 export const DEFAULT_THEME = 'DEFAULT_THEME'

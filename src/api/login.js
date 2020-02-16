@@ -1,32 +1,19 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  Login: '/auth/login',
-  Logout: '/auth/logout',
-  ForgePassword: '/auth/forge-password',
-  Register: '/auth/register',
-  twoStepCode: '/auth/2step-code',
-  SendSms: '/account/sms',
-  SendSmsErr: '/account/sms_err',
-  // get my info
   UserInfo: '/user/info',
-
-  login: '/oauth/token',
+  // 登录接口
+  login: '/oauth2/token/access',
   logout: '/oauth/token/remove'
 }
 
 export default api
 
 /**
- * login func
- * parameter: {
- *     username: '',
- *     password: '',
- *     remember_me: true,
- *     captcha: '12345'
- * }
+ *登录接口
+ *
  * @param parameter
- * @returns {*}
+ * @returns {AxiosPromise}
  */
 export function login (parameter) {
   return axios({
@@ -35,8 +22,8 @@ export function login (parameter) {
     params: parameter,
     // http basic
     auth: {
-      username: 'shield',
-      password: 'shield'
+      username: 'carp',
+      password: 'carp'
     }
   })
 }
@@ -51,14 +38,6 @@ export function logout () {
   })
 }
 
-export function getSmsCaptcha (parameter) {
-  return axios({
-    url: api.SendSms,
-    method: 'post',
-    data: parameter
-  })
-}
-
 export function getInfo () {
   return axios({
     url: '/user/info',
@@ -66,17 +45,5 @@ export function getInfo () {
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }
-  })
-}
-
-/**
- * get user 2step code open?
- * @param parameter {*}
- */
-export function get2step (parameter) {
-  return axios({
-    url: api.twoStepCode,
-    method: 'post',
-    data: parameter
   })
 }
