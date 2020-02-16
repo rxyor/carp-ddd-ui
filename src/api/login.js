@@ -1,11 +1,12 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  UserInfo: '/user/info',
   // 登录
-  login: '/oauth2/token/access',
+  Login: '/oauth2/token/access',
   // 登出
-  logout: '/oauth2/token/remove'
+  Logout: '/oauth2/token/remove',
+  // 用户信息
+  UserInfo: '/oauth2/user'
 }
 
 export default api
@@ -18,7 +19,7 @@ export default api
  */
 export function login (parameter) {
   return axios({
-    url: api.login,
+    url: api.Login,
     method: 'post',
     params: parameter,
     // http basic
@@ -31,7 +32,7 @@ export function login (parameter) {
 
 export function logout () {
   return axios({
-    url: api.logout,
+    url: api.Logout,
     method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
@@ -39,9 +40,9 @@ export function logout () {
   })
 }
 
-export function getInfo () {
+export function userInfo () {
   return axios({
-    url: '/user/info',
+    url: api.UserInfo,
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'

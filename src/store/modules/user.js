@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { login, getInfo, logout } from '@/api/login'
+import { login, logout, userInfo } from '@/api/login'
 import { ACCESS_TOKEN, ACCESS_TOKEN_EXPIRED } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
@@ -34,9 +34,9 @@ const user = {
 
   actions: {
     // 登录
-    Login ({ commit }, userInfo) {
+    Login ({ commit }, param) {
       return new Promise((resolve, reject) => {
-        login(userInfo).then(res => {
+        login(param).then(res => {
           const ret = { success: undefined, data: { access_token: undefined, refresh_token: undefined }, msg: undefined }
           Object.assign(ret, res)
           const accessToken = ret.data.access_token
@@ -51,31 +51,21 @@ const user = {
     },
 
     // 获取用户信息
-    GetInfo ({ commit }) {
+    UserInfo ({ commit }) {
       return new Promise((resolve, reject) => {
-        getInfo().then(response => {
-          const result = response.result
+        userInfo().then(res => {
+          const ret = { success: undefined, data: { resources: [] }, msg: undefined }
+          Object.assign(ret, res)
+          const user = ret.data
 
-          if (result.role && result.role.permissions.length > 0) {
-            const role = result.role
-            role.permissions = result.role.permissions
-            role.permissions.map(per => {
-              if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
-                const action = per.actionEntitySet.map(action => { return action.action })
-                per.actionList = action
-              }
-            })
-            role.permissionList = role.permissions.map(permission => { return permission.permissionId })
-            commit('SET_ROLES', result.role)
-            commit('SET_INFO', result)
-          } else {
-            reject(new Error('getInfo: roles must be a non-null array !'))
+          if (user.resources.length > 0) {
+            commit('SET_ROLES', user.resources)
           }
 
-          commit('SET_NAME', { name: result.name, welcome: welcome() })
-          commit('SET_AVATAR', result.avatar)
-
-          resolve(response)
+          commit('SET_INFO', user)
+          commit('SET_NAME', { name: user.nickname, welcome: welcome() })
+          commit('SET_AVATAR', user.avatar)
+          resolve(res)
         }).catch(error => {
           reject(error)
         })

@@ -6,7 +6,7 @@ const api = {
   twoStepCode: '/auth/2step-code',
   SendSms: '/account/sms',
   SendSmsErr: '/account/sms_err',
-  // get my info
-  UserInfo: '/user/info'
+  // 登录用户信息
+  UserInfo: '/oauth2/user'
 }
 export default api

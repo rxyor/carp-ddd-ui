@@ -95,12 +95,6 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: { '^/api': '' }
       },
-      '/api/user': {
-        target: 'http://localhost:6088',
-        ws: false,
-        changeOrigin: true,
-        pathRewrite: { '^/api': '' }
-      },
       '/api/role': {
         target: 'http://localhost:6088',
         ws: false,
