@@ -5,7 +5,7 @@
         <div class="header">
           <a href="/">
             <img src="~@/assets/logo.svg" class="logo" alt="logo">
-            <span class="title">Carp Platform</span>
+            <span class="title">Carp工作台</span>
           </a>
         </div>
         <div class="desc">

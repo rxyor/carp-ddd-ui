@@ -2,9 +2,10 @@ import { axios } from '@/utils/request'
 
 const api = {
   UserInfo: '/user/info',
-  // 登录接口
+  // 登录
   login: '/oauth2/token/access',
-  logout: '/oauth/token/remove'
+  // 登出
+  logout: '/oauth2/token/remove'
 }
 
 export default api

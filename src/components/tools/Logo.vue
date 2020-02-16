@@ -18,7 +18,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Ant Design Pro',
+      default: 'Carp工作台',
       required: false
     },
     showTitle: {
