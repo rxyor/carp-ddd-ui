@@ -51,7 +51,16 @@ export const asyncRouterMap = [
             path: '/ums/user-list',
             name: 'UserList',
             component: () => import('@/views/ums/UserList'),
-            meta: { title: '用户列表', icon: 'user', keepAlive: true }
+            meta: { title: '用户列表', icon: 'user', keepAlive: true },
+            hideChildrenInMenu: true,
+            children: [
+              {
+                path: '/ums/modules/user-edit',
+                name: 'UserEdit',
+                component: () => import('@/views/ums/modules/UserEdit'),
+                meta: { title: '编辑用户', hidden: true, keepAlive: false }
+              }
+            ]
           },
           {
             path: '/ums/role-list',

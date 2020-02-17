@@ -36,7 +36,7 @@
     <s-table
       ref="table"
       size="default"
-      :rowKey="record => record.clientId"
+      :rowKey="record => record.id"
       :columns="columns"
       :data="loadData"
     >
@@ -86,8 +86,6 @@
       </span>
     </s-table>
 
-    <create-user-modal ref="createUserModal" @ok="handleAddOk"></create-user-modal>
-    <edit-user-modal ref="editUserModal" @ok="handleEditOk" @assignRoleOk="handleEditOk"></edit-user-modal>
   </a-card>
 </template>
 
@@ -95,8 +93,6 @@
 import { STable } from '@/components'
 import { userPage, enableUser, disableUser, deleteUser } from '@/api/user'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
-import CreateUserModal from './modules/CreateUserModal'
-import EditUserModal from './modules/EditUserModal'
 
 const disableMap = {
   0: {
@@ -123,8 +119,6 @@ const lockedMap = {
 export default {
   name: 'TableList',
   components: {
-    CreateUserModal,
-    EditUserModal,
     AFormItem,
     STable
   },
@@ -155,6 +149,13 @@ export default {
       queryParam: { page: 1, pageSize: 10 },
       // 表头
       columns: [
+        {
+          title: '#',
+          dataIndex: '',
+          customRender: (value, row, index) => {
+            return index + 1
+          }
+        },
         {
           title: '用户ID',
           dataIndex: 'id'
@@ -237,8 +238,8 @@ export default {
   },
   methods: {
     handleEdit (record) {
-      this.currentEditRecord = Object.assign({}, record)
-      this.$refs.editUserModal.showForm(this.currentEditRecord)
+      const query = { id: record.id }
+      this.$router.push({ name: 'UserEdit', query: query })
     },
     handleDisable (id) {
       const params = { id: id }
@@ -278,16 +279,6 @@ export default {
             this.$message.error('删除用户失败')
           }
         })
-    },
-    handleAddOk () {
-      this.$refs.table.refresh(true)
-    },
-    handleEditOk () {
-      this.$refs.table.refresh(true)
-    },
-    onChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
     },
     toggleAdvanced () {
       this.advanced = !this.advanced

@@ -4,6 +4,7 @@ const api = {
   delete: '/user/delete/id',
   save: '/user/save',
   update: '/user/update',
+  GetById: '/ums/user/get',
   Page: '/ums/user/page',
   Delete: '/ums/user/delete',
   Enable: '/ums/user/enable',
@@ -17,6 +18,14 @@ export function userPage (parameter) {
     url: api.Page,
     method: 'post',
     data: parameter
+  })
+}
+
+export function getUserById (parameter) {
+  return axios({
+    url: api.GetById,
+    method: 'get',
+    params: parameter
   })
 }
 
