@@ -41,6 +41,17 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
+          label="昵称"
+          hasFeedback
+        >
+          <a-input
+            placeholder="请输入昵称"
+            name="nickname"
+            v-decorator="[ 'nickname', { rules: [ { validator: validateNickname,required: true}] } ]"/>
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
           label="密码"
           hasFeedback
         >
@@ -66,15 +77,48 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="状态"
+          label="禁用状态"
           hasFeedback
           validateStatus="warning"
         >
           <a-select
-            v-decorator="['status', {rules: [{ required: true, message: '请选择状态' }], initialValue: '0'}]">
+            v-decorator="['disable', {rules: [{ required: true, message: '请选择状态' }]}]">
             <a-select-option value="0">正常</a-select-option>
             <a-select-option value="1">禁用</a-select-option>
           </a-select>
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="锁定状态"
+          hasFeedback
+          validateStatus="warning"
+        >
+          <a-select
+            v-decorator="['locked', {rules: [{ required: true, message: '请选择状态' }]}]">
+            <a-select-option value="0">未锁定</a-select-option>
+            <a-select-option value="1">锁定</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="备注"
+          hasFeedback
+        >
+          <a-textarea
+            placeholder="请输入备注"
+            :autosize="textAreaSize"
+            v-decorator="[ 'remark', { rules: [{validator:validateRemark} ] } ]"/>
+        </a-form-item>
+        <a-divider :dashed="true"/>
+        <a-form-item
+          :wrapperCol="{ span: 24 }"
+          style="text-align: right">
+          <a-button @click="goBackList" style="margin-right: 20px">返回</a-button>
+          <a-button type="primary" @click="e=>updateUserById(e)">
+            <span >确定</span>
+          </a-button>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -85,6 +129,7 @@
 import {
   VALIDATE_ERROR_MSG,
   isValidUsername,
+  isValidDisplayName,
   isValidPhone,
   isValidEmail,
   isValidSimplePassword
@@ -103,6 +148,7 @@ export default {
         xs: { span: 24 },
         sm: { span: 13 }
       },
+      textAreaSize: { minRows: 3, maxRows: 6 },
       form: this.$form.createForm(this),
       confirmLoading: false,
 
@@ -124,6 +170,9 @@ export default {
       Object.assign(this.routerParams, this.$route.query)
       Object.assign(this.query, this.routerParams)
     },
+    setQueryParamsFromForm () {
+      Object.assign(this.query, this.form.getFieldsValue())
+    },
     async queryAndFillForm () {
       await this.queryUserById()
       this.fillDataToForm(this.record)
@@ -134,7 +183,10 @@ export default {
           return
         }
 
-        const data = Object.assign({}, queryData)
+        const data = Object.assign({}, queryData, {
+          disable: queryData.disable !== undefined && queryData.disable.toString(),
+          locked: queryData.locked !== undefined && queryData.locked.toString()
+        })
         setTimeout(() => {
           this.form.setFieldsValue(data)
         })
@@ -149,6 +201,9 @@ export default {
         this.confirmLoading = false
       })
     },
+    updateUserById (e) {
+
+    },
     validateUsername  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
         callback()
@@ -157,6 +212,17 @@ export default {
         callback(VALIDATE_ERROR_MSG.username)
       }
       this.query.username = value
+      callback()
+    },
+    validateNickname  (rule, value, callback) {
+      if (value === null || value === undefined || value === '') {
+        const msg = '请输入昵称'
+        callback(msg)
+      }
+      if (!isValidDisplayName(value)) {
+        callback(VALIDATE_ERROR_MSG.displayName)
+      }
+      this.query.nickname = value
       callback()
     },
     validatePhone  (rule, value, callback) {
@@ -195,6 +261,22 @@ export default {
         callback(VALIDATE_ERROR_MSG.confirmPassword)
       }
       callback()
+    },
+    validateRemark  (rule, value, callback) {
+      if (value === null || value === undefined || value === '') {
+        callback()
+      }
+      if (value.length > 255) {
+        const msg = '输入超出限制, 最多255个字符'
+        callback(msg)
+      }
+      this.query.remark = value
+      callback()
+    },
+    goBackList () {
+      this.$router.push({
+        name: 'UserList'
+      })
     }
   }
 }

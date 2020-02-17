@@ -80,7 +80,6 @@ const user = {
           Object.assign(ret, res)
           if (ret.success) {
             commit('SET_TOKEN', '')
-            commit('SET_ROLES', [])
             commit('SET_INFO', undefined)
             Vue.ls.remove(ACCESS_TOKEN)
           } else {

@@ -2,21 +2,15 @@
   <div class="footer">
     <div class="links">
       <a
-        href="https://pro.loacg.com/"
-        target="_blank"
-      >Pro 首页</a>
-      <a
-        href="https://github.com/sendya/ant-design-pro-vue"
+        href="https://gitee.com/rxyor/carp-ddd-ui"
         target="_blank"
       >
         <a-icon type="github" />
       </a>
-      <a href="https://ant.design/">Ant Design</a>
-      <a href="https://vue.ant.design/">Vue Antd</a>
     </div>
     <div class="copyright">
       Copyright
-      <a-icon type="copyright" /> 2018 <span>白鹭学园技术组出品</span>
+      <a-icon type="copyright" /> 2020 <span>社会主义接班人出品</span>
     </div>
   </div>
 </template>
