@@ -60,14 +60,10 @@
 </template>
 
 <script>
-import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 
 export default {
-  components: {
-    TwoStepCaptcha
-  },
   data () {
     return {
       customActiveKey: 'tab1',
@@ -149,12 +145,7 @@ export default {
       }, 1000)
     },
     requestFailed (err) {
-      console.log('error:', err)
-      this.$notification['error']({
-        message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
-        duration: 4
-      })
+      console.log({ msg: '登录失败', err: err })
     }
   }
 }

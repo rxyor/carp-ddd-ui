@@ -43,7 +43,7 @@ router.beforeEach((to, from, next) => {
       Object.assign(ret, res)
       const permissionCodes = [...ret.data.resources]
       if (!permissionCodes || permissionCodes.length === 0) {
-        notification.error({ message: '无权限', description: '您没有任何角色和权限' })
+        notification.warn({ message: '告警', description: '您没有任何角色和权限' })
       }
       store.dispatch('GenerateRoutes', distinctArray(permissionCodes)).then(() => {
         // 根据roles权限生成可访问的路由表
@@ -60,7 +60,7 @@ router.beforeEach((to, from, next) => {
       })
     }).catch(rejected => {
       console.log('router.beforeEach,error:', rejected)
-      notification.error({ message: '错误', description: '请求用户信息失败，请重试' })
+      // notification.error({ message: '错误', description: '请求用户信息失败，请重试' })
       store.dispatch('Logout').then(() => {
         next({ path: '/user/login', query: { redirect: to.fullPath } })
       })

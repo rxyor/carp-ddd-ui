@@ -1,15 +1,23 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  complexUserPage: '/user/page/complex_user',
-  enable: '/user/enable/id',
-  disable: '/user/disable/id',
   delete: '/user/delete/id',
   save: '/user/save',
-  update: '/user/update'
+  update: '/user/update',
+  Page: '/ums/user/page',
+  Enable: '/ums/user/enable',
+  Disable: '/ums/user/disable'
 }
 
 export default api
+
+export function userPage (parameter) {
+  return axios({
+    url: api.Page,
+    method: 'post',
+    data: parameter
+  })
+}
 
 export function getUserList (parameter) {
   return axios({
@@ -19,17 +27,9 @@ export function getUserList (parameter) {
   })
 }
 
-export function getComplexUserByPage (parameter) {
-  return axios({
-    url: api.complexUserPage,
-    method: 'post',
-    data: parameter
-  })
-}
-
 export function enableUser (parameter) {
   return axios({
-    url: api.enable,
+    url: api.Enable,
     method: 'post',
     params: parameter
   })
@@ -37,7 +37,7 @@ export function enableUser (parameter) {
 
 export function disableUser (parameter) {
   return axios({
-    url: api.disable,
+    url: api.Disable,
     method: 'post',
     params: parameter
   })

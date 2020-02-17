@@ -43,6 +43,9 @@
       <span slot="disable" slot-scope="text">
         <a-badge :status="text | disableTypeFilter" :text="text | disableFilter" />
       </span>
+      <span slot="locked" slot-scope="text">
+        <a-badge :status="text | lockedTypeFilter" :text="text | lockedFilter" />
+      </span>
       <div
         slot="expandedRowRender"
         slot-scope="record"
@@ -90,7 +93,7 @@
 
 <script>
 import { STable } from '@/components'
-import { getComplexUserByPage, enableUser, disableUser, deleteUser } from '@/api/user'
+import { userPage, enableUser, disableUser, deleteUser } from '@/api/user'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
 import CreateUserModal from './modules/CreateUserModal'
 import EditUserModal from './modules/EditUserModal'
@@ -103,6 +106,17 @@ const disableMap = {
   1: {
     status: 'default',
     text: '禁用'
+  }
+}
+
+const lockedMap = {
+  0: {
+    status: 'success',
+    text: '正常'
+  },
+  1: {
+    status: 'default',
+    text: '锁定'
   }
 }
 
@@ -138,7 +152,7 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: {},
+      queryParam: { page: 1, pageSize: 10 },
       // 表头
       columns: [
         {
@@ -150,13 +164,30 @@ export default {
           dataIndex: 'username'
         },
         {
+          title: '昵称',
+          dataIndex: 'nickname'
+        },
+        {
+          title: '手机号',
+          dataIndex: 'phone'
+        },
+        {
+          title: '邮件',
+          dataIndex: 'email'
+        },
+        {
           title: '状态',
           dataIndex: 'disable',
           scopedSlots: { customRender: 'disable' }
         },
         {
+          title: '锁定',
+          dataIndex: 'locked',
+          scopedSlots: { customRender: 'locked' }
+        },
+        {
           title: '创建时间',
-          dataIndex: 'createDate'
+          dataIndex: 'createTime'
         }, {
           title: '操作',
           width: '150px',
@@ -166,20 +197,22 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        parameter.pageIndex = parameter.pageNo
-        Object.assign(this.queryParam, parameter)
-        return getComplexUserByPage(this.queryParam)
-          .then(res => {
-            const result = {}
-            if (res || res.success || res.data) {
-              result.pageNo = res.data.current
-              result.pageSize = res.data.size
-              result.totalCount = res.data.total
-              result.totalPage = res.data.pages
-              result.data = res.data.records
-            }
-            return result
-          })
+        Object.assign(this.queryParam, { page: parameter.pageNo })
+
+        return userPage(this.queryParam).then(res => {
+          const source = { success: false, msg: undefined, data: { content: [], totalPages: 1, totalElements: 0, size: 0, number: 0 } }
+          Object.assign(source, res)
+
+          if (!source.success) {
+            this.$message.error('请求用户数据失败')
+            console.error(res)
+          }
+          const data = source.data
+
+          const ret = { pageNo: 1, pageSize: 10, totalCount: 0, totalPage: 1, data: [] }
+          Object.assign(ret, { pageNo: data.number + 1, pageSize: data.size, totalCount: data.totalElements, totalPage: data.totalPages, data: data.content })
+          return ret
+        })
       },
 
       selectedRowKeys: [],
@@ -192,6 +225,12 @@ export default {
     },
     disableTypeFilter (type) {
       return disableMap[type].status
+    },
+    lockedFilter (type) {
+      return lockedMap[type].text
+    },
+    lockedTypeFilter (type) {
+      return lockedMap[type].status
     }
   },
   created () {
@@ -202,17 +241,19 @@ export default {
       this.$refs.editUserModal.showForm(this.currentEditRecord)
     },
     handleDisable (id) {
-      const params = { userId: id }
-      return disableUser(params)
-        .then(res => {
-          console.log('enableUser: ', res)
-          if (res || res.success || res.data) {
-            this.$refs.table.refresh(true)
-            this.$message.info('禁用用户成功')
-          } else {
-            this.$message.error('禁用用户失败')
-          }
-        })
+      const params = { id: id }
+      return disableUser(params).then(res => {
+        const source = { success: false, msg: undefined }
+        Object.assign(source, res)
+
+        if (source.success) {
+          this.$refs.table.refresh(true)
+          this.$message.info('禁用用户成功')
+        } else {
+          this.$message.error('禁用用户失败')
+          console.error(res)
+        }
+      })
     },
     handleEnable (id) {
       const params = { userId: id }

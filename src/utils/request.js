@@ -14,21 +14,20 @@ const service = axios.create({
   timeout: 6000
 })
 
+// 错误处理
 const err = (error) => {
   if (error.response) {
-    const data = error.response.data
-    const token = Vue.ls.get(ACCESS_TOKEN)
-    if (error.response.status === 403) {
-      notification.error({
-        message: 'Forbidden',
-        description: data.message
-      })
+    const data = { status: 200, success: true, code: 200, msg: undefined }
+    Object.assign(data, error.response.data, { status: error.response.status })
+
+    if (data.status === 403) {
+      console.error({ msg: '无权访问', err: error.response.data })
     }
-    if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
-      notification.error({
-        message: 'Unauthorized',
-        description: 'Authorization verification failed'
-      })
+
+    if (data.status === 401) {
+      console.error({ msg: '无权访问', err: error.response.data })
+
+      const token = Vue.ls.get(ACCESS_TOKEN)
       if (token) {
         store.dispatch('Logout').then(() => {
           setTimeout(() => {
@@ -37,28 +36,31 @@ const err = (error) => {
         })
       }
     }
-    if (error.response.status !== 200) {
-      console.log('response.data:', data)
-      const errorMsg = data.msg || '服务异常'
-      notification.error({
-        message: errorMsg,
-        description: data.message
-      })
+
+    if (data.status !== 200 && data.status !== 401 && data.status !== 403) {
+      console.error({ msg: '请求失败', err: error.response.data })
+    }
+
+    if (!data.success) {
+      console.error({ msg: '业务请求失败', err: data })
+      const msg = data.msg || '业务请求失败'
+      notification.error({ message: '错误', description: msg })
     }
   }
   return Promise.reject(error)
 }
 
-// request interceptor
+// 请求拦截器
 service.interceptors.request.use(config => {
   const token = Vue.ls.get(ACCESS_TOKEN)
   if (token) {
-    config.headers['Authorization'] = 'Bearer ' + token // 让每个请求携带自定义 token 请根据实际情况自行修改
+    // 写入Token
+    config.headers['Authorization'] = 'Bearer ' + token
   }
   return config
 }, err)
 
-// response interceptor
+// 响应拦截器
 service.interceptors.response.use((response) => {
   return response.data
 }, err)

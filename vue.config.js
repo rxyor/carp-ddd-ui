@@ -95,26 +95,8 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: { '^/api': '' }
       },
-      '/api/role': {
-        target: 'http://localhost:6088',
-        ws: false,
-        changeOrigin: true,
-        pathRewrite: { '^/api': '' }
-      },
-      '/api/permission': {
-        target: 'http://localhost:6088',
-        ws: false,
-        changeOrigin: true,
-        pathRewrite: { '^/api': '' }
-      },
-      '/api/client_detail': {
-        target: 'http://localhost:6088',
-        ws: false,
-        changeOrigin: true,
-        pathRewrite: { '^/api': '' }
-      },
-      '/api/kv_config': {
-        target: 'http://localhost:6088',
+      '/api/ums/*': {
+        target: 'http://localhost:8000',
         ws: false,
         changeOrigin: true,
         pathRewrite: { '^/api': '' }
