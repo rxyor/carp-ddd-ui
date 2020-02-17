@@ -41,34 +41,34 @@ export const asyncRouterMap = [
       },
       // 用户中心
       {
-        path: '/upms',
-        name: 'UPMS',
+        path: '/ums',
+        name: 'ums',
         component: PageView,
         meta: { title: '用户权限管理', icon: 'safety', permission: ['ROLE_admin'] },
-        redirect: '/upms/user-list',
+        redirect: '/ums/user-list',
         children: [
           {
-            path: '/upms/user-list',
+            path: '/ums/user-list',
             name: 'UserList',
-            component: () => import('@/views/upms/UserList'),
+            component: () => import('@/views/ums/UserList'),
             meta: { title: '用户列表', icon: 'user', keepAlive: true }
           },
           {
-            path: '/upms/role-list',
+            path: '/ums/role-list',
             name: 'RoleList',
-            component: () => import('@/views/upms/RoleList'),
+            component: () => import('@/views/ums/RoleList'),
             meta: { title: '角色列表', icon: 'team', keepAlive: true }
           },
           {
-            path: '/upms/permission-list',
+            path: '/ums/permission-list',
             name: 'PermissionList',
-            component: () => import('@/views/upms/PermissionList'),
+            component: () => import('@/views/ums/PermissionList'),
             meta: { title: '权限列表', icon: 'lock', keepAlive: true }
           },
           {
-            path: '/upms/client-list',
+            path: '/ums/client-list',
             name: 'ClientList',
-            component: () => import('@/views/upms/ClientList'),
+            component: () => import('@/views/ums/ClientList'),
             meta: { title: '客户端列表', icon: 'key', keepAlive: true }
           }
         ]
