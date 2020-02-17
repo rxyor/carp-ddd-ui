@@ -45,22 +45,35 @@ export const asyncRouterMap = [
         name: 'ums',
         component: PageView,
         meta: { title: '用户权限管理', icon: 'safety', permission: ['ROLE_admin'] },
-        redirect: '/ums/user-list',
+        redirect: '/ums/user',
         children: [
           {
-            path: '/ums/user-list',
-            name: 'UserList',
-            component: () => import('@/views/ums/UserList'),
-            meta: { title: '用户列表', icon: 'user', keepAlive: true },
+            path: '/ums/user',
+            name: 'UmsUser',
+            component: RouteView,
+            meta: { title: '用户管理', icon: 'user', keepAlive: true },
+            redirect: '/ums/user/list',
             hideChildrenInMenu: true,
             children: [
               {
-                path: '/ums/modules/user-edit',
+                path: '/ums/user/list',
+                name: 'UserList',
+                component: () => import('@/views/ums/user/UserList'),
+                meta: { title: '编辑用户', icon: 'edit', hidden: true, keepAlive: false }
+              },
+              {
+                path: '/ums/user/edit',
                 name: 'UserEdit',
-                component: () => import('@/views/ums/modules/UserEdit'),
-                meta: { title: '编辑用户', hidden: true, keepAlive: false }
+                component: () => import('@/views/ums/user/UserEdit'),
+                meta: { title: '编辑用户', icon: 'edit', hidden: true, keepAlive: false }
               }
             ]
+          },
+          {
+            path: '/ums/user-edit2',
+            name: 'UserEdit2',
+            component: () => import('@/views/ums/user/UserEdit'),
+            meta: { title: '编辑用户', icon: 'edit', hidden: true, keepAlive: false }
           },
           {
             path: '/ums/role-list',

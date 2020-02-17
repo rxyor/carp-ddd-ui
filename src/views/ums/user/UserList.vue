@@ -257,28 +257,29 @@ export default {
       })
     },
     handleEnable (id) {
-      const params = { userId: id }
-      return enableUser(params)
-        .then(res => {
-          if (res || res.success || res.data) {
-            this.$refs.table.refresh(true)
-            this.$message.info('启用用户成功')
-          } else {
-            this.$message.error('启用用户失败')
-          }
-        })
+      const params = { id: id }
+      return enableUser(params).then(res => {
+        const source = { success: false }
+        Object.assign(source, res)
+        if (source.success) {
+          this.$refs.table.refresh(true)
+          this.$message.info('启用用户成功')
+        } else {
+          this.$message.error('启用用户失败')
+        }
+      })
     },
     handleDelete (id) {
-      const params = { userId: id }
-      return deleteUser(params)
-        .then(res => {
-          if (res || res.success || res.data) {
-            this.$refs.table.refresh(true)
-            this.$message.info('删除用户成功')
-          } else {
-            this.$message.error('删除用户失败')
-          }
-        })
+      const params = { id: id }
+      return deleteUser(params).then(res => {
+        const source = { success: false }
+        Object.assign(source, res)
+        if (source.success) {
+          this.$message.info('删除用户成功')
+        } else {
+          this.$message.error('删除用户失败')
+        }
+      })
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
