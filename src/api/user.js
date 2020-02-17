@@ -3,7 +3,7 @@ import { axios } from '@/utils/request'
 const api = {
   delete: '/user/delete/id',
   save: '/user/save',
-  update: '/user/update',
+  Update: '/ums/user/update',
   GetById: '/ums/user/get',
   Page: '/ums/user/page',
   Delete: '/ums/user/delete',
@@ -71,7 +71,7 @@ export function saveUser (parameter) {
 
 export function updateUser (parameter) {
   return axios({
-    url: api.update,
+    url: api.Update,
     method: 'post',
     data: parameter
   })

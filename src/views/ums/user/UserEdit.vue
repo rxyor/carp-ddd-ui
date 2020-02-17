@@ -134,7 +134,7 @@ import {
   isValidEmail,
   isValidSimplePassword
 } from '@/utils/validate'
-import { getUserById } from '@/api/user'
+import { getUserById, updateUser } from '@/api/user'
 
 export default {
   name: 'UserEdit',
@@ -202,7 +202,24 @@ export default {
       })
     },
     updateUserById (e) {
+      this.setQueryParamsFromForm()
+      e.preventDefault()
 
+      this.form.validateFields((err, values) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+
+        updateUser(this.query).then(res => {
+          const source = { success: false, msg: undefined }
+          Object.assign(source, res)
+          if (source.success) {
+            this.$message.success('修改成功')
+            this.goBackList()
+          }
+        })
+      })
     },
     validateUsername  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
