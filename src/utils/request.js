@@ -20,13 +20,14 @@ const err = (error) => {
     const data = { status: 200, success: true, code: 200, msg: undefined }
     Object.assign(data, error.response.data, { status: error.response.status })
 
-    if (data.status === 403) {
-      console.error({ msg: '无权访问', err: error.response.data })
-    }
-
-    if (data.status === 401) {
-      console.error({ msg: '无权访问', err: error.response.data })
-
+    if (data.status === 500) {
+      notification.error({ message: '错误', description: '请求服务器失败' })
+    } else if (data.status === 404) {
+      notification.error({ message: '错误', description: '请求路径不存在' })
+    } else if (data.status === 403) {
+      console.error({ msg: '无权访问', err: data })
+    } else if (data.status === 401) {
+      console.error({ msg: '无权访问', err: data })
       const token = Vue.ls.get(ACCESS_TOKEN)
       if (token) {
         store.dispatch('Logout').then(() => {
@@ -35,10 +36,8 @@ const err = (error) => {
           }, 1500)
         })
       }
-    }
-
-    if (data.status !== 200 && data.status !== 401 && data.status !== 403) {
-      console.error({ msg: '请求失败', err: error.response.data })
+    } else if (data.status !== 200) {
+      console.error({ msg: '请求失败', err: data })
     }
 
     if (!data.success) {

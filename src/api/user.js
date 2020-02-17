@@ -5,6 +5,7 @@ const api = {
   save: '/user/save',
   update: '/user/update',
   Page: '/ums/user/page',
+  Delete: '/ums/user/delete',
   Enable: '/ums/user/enable',
   Disable: '/ums/user/disable'
 }
@@ -45,7 +46,7 @@ export function disableUser (parameter) {
 
 export function deleteUser (parameter) {
   return axios({
-    url: api.delete,
+    url: api.Delete,
     method: 'post',
     params: parameter
   })
