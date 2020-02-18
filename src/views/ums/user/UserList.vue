@@ -197,8 +197,8 @@ export default {
         }
       ],
       // 加载数据方法 必须为 Promise 对象
-      loadData: parameter => {
-        Object.assign(this.queryParam, { page: parameter.pageNo })
+      loadData: param => {
+        Object.assign(this.queryParam, { page: param.pageNo, pageSize: param.pageSize })
 
         return userPage(this.queryParam).then(res => {
           const source = { success: false, msg: undefined, data: { content: [], totalPages: 1, totalElements: 0, size: 0, number: 0 } }

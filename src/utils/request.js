@@ -64,6 +64,11 @@ service.interceptors.request.use(config => {
 
 // 响应拦截器
 service.interceptors.response.use((response) => {
+  const data = { status: 200, success: true, code: 200, msg: undefined }
+  Object.assign(data, response.data)
+  if (!data.success) {
+    return err({ response: response })
+  }
   return response.data
 }, err)
 

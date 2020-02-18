@@ -85,17 +85,13 @@
       </span>
     </s-table>
 
-    <create-role-modal ref="createRoleModal" @ok="handleAddOk"></create-role-modal>
-    <edit-role-modal ref="editRoleModal" @ok="handleEditOk" @assignPermissionOk="handleEditOk"></edit-role-modal>
   </a-card>
 </template>
 
 <script>
 import { STable } from '@/components'
-import { queryComplexRoleByPage, enableRole, disableRole, deleteRole } from '@/api/role'
+import { rolePage, enableRole, disableRole, deleteRole } from '@/api/role'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
-import CreateRoleModal from './modules/CreateRoleModal'
-import EditRoleModal from './modules/EditRoleModal'
 
 const disableMap = {
   0: {
@@ -111,8 +107,6 @@ const disableMap = {
 export default {
   name: 'TableList',
   components: {
-    CreateRoleModal,
-    EditRoleModal,
     AFormItem,
     STable
   },
@@ -129,9 +123,6 @@ export default {
         sm: { span: 16 }
       },
       form: null,
-      mdl: {},
-      // 当前编辑Record
-      currentEditRecord: {},
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
@@ -170,21 +161,23 @@ export default {
         }
       ],
       // 加载数据方法 必须为 Promise 对象
-      loadData: parameter => {
-        parameter.pageIndex = parameter.pageNo
-        Object.assign(this.queryParam, parameter)
-        return queryComplexRoleByPage(this.queryParam)
-          .then(res => {
-            const result = {}
-            if (res || res.success || res.data) {
-              result.pageNo = res.data.current
-              result.pageSize = res.data.size
-              result.totalCount = res.data.total
-              result.totalPage = res.data.pages
-              result.data = res.data.records
-            }
-            return result
-          })
+      loadData: param => {
+        Object.assign(this.queryParam, { page: param.pageNo, pageSize: param.pageSize })
+
+        return rolePage(this.queryParam).then(res => {
+          const source = { success: false, msg: undefined, data: { content: [], totalPages: 1, totalElements: 0, size: 0, number: 0 } }
+          Object.assign(source, res)
+
+          if (!source.success) {
+            this.$message.error('请求用户数据失败')
+            console.error(res)
+          }
+          const data = source.data
+
+          const ret = { pageNo: 1, pageSize: 10, totalCount: 0, totalPage: 1, data: [] }
+          Object.assign(ret, { pageNo: data.number + 1, pageSize: data.size, totalCount: data.totalElements, totalPage: data.totalPages, data: data.content })
+          return ret
+        })
       },
 
       selectedRowKeys: [],
@@ -243,25 +236,8 @@ export default {
           this.$message.error('删除角色失败:', error)
         })
     },
-    onChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-    },
-    handleEditOk (data) {
-      this.$refs.table.refresh(true)
-    },
-    handleAddOk (data) {
-      this.$refs.table.refresh(true)
-    },
     toggleAdvanced () {
       this.advanced = !this.advanced
-    }
-  },
-  watch: {
-    editVisible: function (newValue) {
-      if (newValue) {
-        this.fetchTransferData()
-      }
     }
   }
 }

@@ -74,12 +74,21 @@ export const asyncRouterMap = [
                 meta: { title: '创建用户', icon: 'add', hidden: true, keepAlive: false }
               }
             ]
-          },
-          {
-            path: '/ums/role-list',
-            name: 'RoleList',
-            component: () => import('@/views/ums/RoleList'),
-            meta: { title: '角色列表', icon: 'team', keepAlive: true }
+          }, {
+            path: '/ums/role',
+            name: 'UmsRole',
+            component: RouteView,
+            meta: { title: '角色管理', icon: 'team', keepAlive: true },
+            redirect: '/ums/role/list',
+            hideChildrenInMenu: true,
+            children: [
+              {
+                path: '/ums/role/list',
+                name: 'RoleList',
+                component: () => import('@/views/ums/role/RoleList'),
+                meta: { title: '角色列表', icon: 'edit', hidden: true, keepAlive: false }
+              }
+            ]
           },
           {
             path: '/ums/permission-list',

@@ -9,6 +9,10 @@ const api = {
   disable: '/role/disable/id',
   delete: '/role/delete/id',
   save: '/role/save',
+  Page: '/ums/role/page',
+  Delete: '/ums/role/delete',
+  Disable: '/ums/role/disable',
+  Enable: '/ums/role/enable',
   update: '/role/update'
 }
 
@@ -37,9 +41,9 @@ export function deleteBatchUserRoleRelationByUserId (params) {
   })
 }
 
-export function queryComplexRoleByPage (parameter) {
+export function rolePage (parameter) {
   return axios({
-    url: api.complexRolePage,
+    url: api.Page,
     method: 'post',
     data: parameter
   })
@@ -47,7 +51,7 @@ export function queryComplexRoleByPage (parameter) {
 
 export function enableRole (parameter) {
   return axios({
-    url: api.enable,
+    url: api.Disable,
     method: 'post',
     params: parameter
   })
@@ -55,7 +59,7 @@ export function enableRole (parameter) {
 
 export function disableRole (parameter) {
   return axios({
-    url: api.disable,
+    url: api.Disable,
     method: 'post',
     params: parameter
   })
@@ -63,7 +67,7 @@ export function disableRole (parameter) {
 
 export function deleteRole (parameter) {
   return axios({
-    url: api.delete,
+    url: api.Delete,
     method: 'post',
     params: parameter
   })
