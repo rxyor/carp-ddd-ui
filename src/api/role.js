@@ -1,52 +1,30 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  listAllEnable: '/role/list/all/enable',
-  insertBatchRelationByUserId: '/role/insert/relation/batch/user_id',
-  deleteBatchRelationByUserId: '/role/delete/relation/batch/user_id',
-  complexRolePage: '/role/page/complex_role',
-  enable: '/role/enable/id',
-  disable: '/role/disable/id',
-  delete: '/role/delete/id',
-  save: '/role/save',
   Save: '/ums/role/save',
+  Update: '/ums/role/update',
+  GetById: '/ums/role/get',
   Page: '/ums/role/page',
   Delete: '/ums/role/delete',
   Disable: '/ums/role/disable',
-  Enable: '/ums/role/enable',
-  update: '/role/update'
+  Enable: '/ums/role/enable'
 }
 
 export default api
-
-export function listAllEnableRoles () {
-  return axios({
-    url: api.listAllEnable,
-    method: 'get'
-  })
-}
-
-export function insertBatchUserRoleRelationByUserId (params) {
-  return axios({
-    url: api.insertBatchRelationByUserId,
-    method: 'post',
-    data: params
-  })
-}
-
-export function deleteBatchUserRoleRelationByUserId (params) {
-  return axios({
-    url: api.deleteBatchRelationByUserId,
-    method: 'post',
-    data: params
-  })
-}
 
 export function rolePage (parameter) {
   return axios({
     url: api.Page,
     method: 'post',
     data: parameter
+  })
+}
+
+export function getRoleById (parameter) {
+  return axios({
+    url: api.GetById,
+    method: 'get',
+    params: parameter
   })
 }
 
@@ -84,7 +62,7 @@ export function saveRole (parameter) {
 
 export function updateRole (parameter) {
   return axios({
-    url: api.update,
+    url: api.Update,
     method: 'post',
     data: parameter
   })

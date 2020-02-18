@@ -17,24 +17,24 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="角色编码"
+          label="权限编码"
           hasFeedback
         >
           <a-input
-            placeholder="请输入角色编码"
-            name="roleCode"
-            v-decorator="[ 'roleCode', { rules: [ { validator: validateRoleCode, required: true}] } ]"
+            placeholder="请输入权限编码"
+            name="permissionCode"
+            v-decorator="[ 'permissionCode', { rules: [ { validator: validatePermissionCode, required: true}] } ]"
             disabled="disabled" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="角色名称"
+          label="权限名称"
           hasFeedback>
           <a-input
-            placeholder="请输入角色名称"
-            name="roleName"
-            v-decorator="[ 'roleName', { rules: [ { validator: validateRoleName, required: true}] } ]"/>
+            placeholder="请输入权限名称"
+            name="permissionName"
+            v-decorator="[ 'permissionName', { rules: [ { validator: validatePermissionName, required: true}] } ]"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -65,7 +65,7 @@
           :wrapperCol="{ span: 24 }"
           style="text-align: right">
           <a-button @click="goBackList" style="margin-right: 20px">返回</a-button>
-          <a-button type="primary" @click="e=>updateRoleById(e)">
+          <a-button type="primary" @click="e=>updatePermissionById(e)">
             <span >确定</span>
           </a-button>
         </a-form-item>
@@ -77,13 +77,13 @@
 <script>
 import {
   VALIDATE_ERROR_MSG,
-  isValidRoleCode,
+  isValidPermissionCode,
   isValidShortChineseName
 } from '@/utils/validate'
-import { updateRole, getRoleById } from '@/api/role'
+import { updatePermission, getPermissionById } from '@/api/permission'
 
 export default {
-  name: 'RoleEdit',
+  name: 'PermissionEdit',
   data () {
     return {
       labelCol: {
@@ -120,7 +120,7 @@ export default {
       Object.assign(this.query, this.form.getFieldsValue())
     },
     async queryAndFillForm () {
-      await this.queryRoleById()
+      await this.queryPermissionById()
       this.fillDataToForm(this.record)
       Object.assign(this.query, this.record)
     },
@@ -138,16 +138,16 @@ export default {
         })
       })
     },
-    async queryRoleById () {
+    async queryPermissionById () {
       this.confirmLoading = true
-      await getRoleById({ id: this.query.id }).then(res => {
+      await getPermissionById({ id: this.query.id }).then(res => {
         const source = { success: false, msg: undefined, data: {} }
         Object.assign(source, res)
         Object.assign(this.record, source.data)
         this.confirmLoading = false
       })
     },
-    updateRoleById (e) {
+    updatePermissionById (e) {
       this.setQueryParamsFromForm()
       e.preventDefault()
 
@@ -156,7 +156,7 @@ export default {
           console.error(err)
           return
         }
-        updateRole(this.query).then(res => {
+        updatePermission(this.query).then(res => {
           const source = { success: false, msg: undefined }
           Object.assign(source, res)
           if (source.success) {
@@ -166,25 +166,25 @@ export default {
         })
       })
     },
-    validateRoleCode  (rule, value, callback) {
+    validatePermissionCode  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
         callback()
       }
-      if (!isValidRoleCode(value)) {
-        callback(VALIDATE_ERROR_MSG.roleCode)
+      if (!isValidPermissionCode(value)) {
+        callback(VALIDATE_ERROR_MSG.permissionCode)
       }
-      this.query.roleCode = value
+      this.query.permissionCode = value
       callback()
     },
-    validateRoleName  (rule, value, callback) {
+    validatePermissionName  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
-        const msg = '请输入角色名称'
+        const msg = '请输入权限名称'
         callback(msg)
       }
       if (!isValidShortChineseName(value)) {
         callback(VALIDATE_ERROR_MSG.shortChineseName)
       }
-      this.query.roleName = value
+      this.query.permissionName = value
       callback()
     },
     validateRemark  (rule, value, callback) {
@@ -200,7 +200,7 @@ export default {
     },
     goBackList () {
       this.$router.push({
-        name: 'RoleList'
+        name: 'PermissionList'
       })
     }
   }

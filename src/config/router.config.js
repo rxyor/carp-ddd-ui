@@ -74,7 +74,8 @@ export const asyncRouterMap = [
                 meta: { title: '创建用户', icon: 'add', hidden: true, keepAlive: false }
               }
             ]
-          }, {
+          },
+          {
             path: '/ums/role',
             name: 'UmsRole',
             component: RouteView,
@@ -103,10 +104,32 @@ export const asyncRouterMap = [
             ]
           },
           {
-            path: '/ums/permission-list',
-            name: 'PermissionList',
-            component: () => import('@/views/ums/PermissionList'),
-            meta: { title: '权限列表', icon: 'lock', keepAlive: true }
+            path: '/ums/permission',
+            name: 'UmsPermission',
+            component: RouteView,
+            meta: { title: '权限管理', icon: 'team', keepAlive: true },
+            redirect: '/ums/permission/list',
+            hideChildrenInMenu: true,
+            children: [
+              {
+                path: '/ums/permission/list',
+                name: 'PermissionList',
+                component: () => import('@/views/ums/permission/PermissionList'),
+                meta: { title: '权限列表', icon: 'edit', hidden: true, keepAlive: false }
+              },
+              {
+                path: '/ums/permission/edit',
+                name: 'PermissionEdit',
+                component: () => import('@/views/ums/permission/PermissionEdit'),
+                meta: { title: '编辑权限', icon: 'edit', hidden: true, keepAlive: false }
+              },
+              {
+                path: '/ums/permission/add',
+                name: 'PermissionAdd',
+                component: () => import('@/views/ums/permission/PermissionAdd'),
+                meta: { title: '新建权限', icon: 'edit', hidden: true, keepAlive: false }
+              }
+            ]
           },
           {
             path: '/ums/client-list',

@@ -1,45 +1,36 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  listAllEnable: '/permission/list/all/enable',
-  queryPage: '/permission/query/page',
-  insertBatchRelationByUserId: '/permission/insert/relation/batch/role_id',
-  deleteBatchRelationByUserId: '/permission/delete/relation/batch/role_id',
-  enable: '/permission/enable/id',
-  disable: '/permission/disable/id',
-  delete: '/permission/delete/id',
-  save: '/permission/save',
-  update: '/permission/update'
+  Save: '/ums/permission/save',
+  Update: '/ums/permission/update',
+  GetById: '/ums/permission/get',
+  Page: '/ums/permission/page',
+  Delete: '/ums/permission/delete',
+  Disable: '/ums/permission/disable',
+  Enable: '/ums/permission/enable'
 }
 
 export default api
 
-export function listAllEnablePermissions () {
+export function permissionPage (parameter) {
   return axios({
-    url: api.listAllEnable,
-    method: 'get'
+    url: api.Page,
+    method: 'post',
+    data: parameter
   })
 }
 
-export function insertBatchRolePermissionRelationByRoleId (params) {
+export function getPermissionById (parameter) {
   return axios({
-    url: api.insertBatchRelationByUserId,
-    method: 'post',
-    data: params
-  })
-}
-
-export function deleteBatchRolePermissionRelationByRoleId (params) {
-  return axios({
-    url: api.deleteBatchRelationByUserId,
-    method: 'post',
-    data: params
+    url: api.GetById,
+    method: 'get',
+    params: parameter
   })
 }
 
 export function enablePermission (parameter) {
   return axios({
-    url: api.enable,
+    url: api.Disable,
     method: 'post',
     params: parameter
   })
@@ -47,7 +38,7 @@ export function enablePermission (parameter) {
 
 export function disablePermission (parameter) {
   return axios({
-    url: api.disable,
+    url: api.Disable,
     method: 'post',
     params: parameter
   })
@@ -55,7 +46,7 @@ export function disablePermission (parameter) {
 
 export function deletePermission (parameter) {
   return axios({
-    url: api.delete,
+    url: api.Delete,
     method: 'post',
     params: parameter
   })
@@ -63,7 +54,7 @@ export function deletePermission (parameter) {
 
 export function savePermission (parameter) {
   return axios({
-    url: api.save,
+    url: api.Save,
     method: 'post',
     data: parameter
   })
@@ -71,15 +62,7 @@ export function savePermission (parameter) {
 
 export function updatePermission (parameter) {
   return axios({
-    url: api.update,
-    method: 'post',
-    data: parameter
-  })
-}
-
-export function queryPermissionByPage (parameter) {
-  return axios({
-    url: api.queryPage,
+    url: api.Update,
     method: 'post',
     data: parameter
   })
