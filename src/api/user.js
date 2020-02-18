@@ -3,6 +3,7 @@ import { axios } from '@/utils/request'
 const api = {
   delete: '/user/delete/id',
   save: '/user/save',
+  Save: '/ums/user/save',
   Update: '/ums/user/update',
   GetById: '/ums/user/get',
   Page: '/ums/user/page',
@@ -63,7 +64,7 @@ export function deleteUser (parameter) {
 
 export function saveUser (parameter) {
   return axios({
-    url: api.save,
+    url: api.Save,
     method: 'post',
     data: parameter
   })

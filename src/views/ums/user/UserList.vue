@@ -24,7 +24,7 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-              <a-button type="primary" icon="plus" @click="$refs.createUserModal.showForm()">新建</a-button>
+              <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
               <a-button style="margin-left: 8px" type="primary" icon="search"@click="$refs.table.refresh(true)">查询</a-button>
               <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
             </span>
@@ -237,6 +237,9 @@ export default {
   created () {
   },
   methods: {
+    handleAdd () {
+      this.$router.push({ name: 'UserAdd' })
+    },
     handleEdit (record) {
       const query = { id: record.id }
       this.$router.push({ name: 'UserEdit', query: query })

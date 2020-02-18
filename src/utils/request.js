@@ -44,6 +44,9 @@ const err = (error) => {
       console.error({ msg: '业务请求失败', err: data })
       const msg = data.msg || '业务请求失败'
       notification.error({ message: '错误', description: msg })
+      if (data.code === 401) {
+        this.$router.push({ path: '/user/login' })
+      }
     }
   }
   return Promise.reject(error)

@@ -27,8 +27,7 @@
           <a-input
             placeholder="请输入用户名"
             name="username"
-            v-decorator="[ 'username', { rules: [ { validator: validateUsername, }] } ]"
-            disabled="disabled" />
+            v-decorator="[ 'username', { rules: [ { validator: validateUsername, required: true}] } ]"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -39,8 +38,7 @@
           <a-input
             placeholder="请输入手机号"
             name="phone"
-            v-decorator="[ 'phone', { rules: [ { validator: validatePhone, }] } ]"
-            disabled="disabled" />
+            v-decorator="[ 'phone', { rules: [ { validator: validatePhone, required: true}] } ]"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -51,8 +49,7 @@
           <a-input
             placeholder="请输入邮箱"
             name="email"
-            v-decorator="[ 'email', { rules: [ { validator: validateEmail, }] } ]"
-            disabled="disabled" />
+            v-decorator="[ 'email', { rules: [ { validator: validateEmail, required: true}] } ]"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -75,7 +72,7 @@
             placeholder="请输入密码"
             name="password"
             type="password"
-            v-decorator="[ 'password', { rules: [ { validator: validatePassword, }] } ]"/>
+            v-decorator="[ 'password', { rules: [ { validator: validatePassword, required: true}] } ]"/>
         </a-form-item>
 
         <a-form-item
@@ -88,33 +85,7 @@
             placeholder="请再次输入密码"
             name="confirmPassword"
             type="password"
-            v-decorator="[ 'confirmPassword', { rules: [ { validator: validateConfirmPassword, }] } ]"/>
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="禁用状态"
-          hasFeedback
-          validateStatus="warning"
-        >
-          <a-select
-            v-decorator="['disable', {rules: [{ required: true, message: '请选择状态' }]}]">
-            <a-select-option value="0">正常</a-select-option>
-            <a-select-option value="1">禁用</a-select-option>
-          </a-select>
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="锁定状态"
-          hasFeedback
-          validateStatus="warning"
-        >
-          <a-select
-            v-decorator="['locked', {rules: [{ required: true, message: '请选择状态' }]}]">
-            <a-select-option value="0">未锁定</a-select-option>
-            <a-select-option value="1">锁定</a-select-option>
-          </a-select>
+            v-decorator="[ 'confirmPassword', { rules: [ { validator: validateConfirmPassword, required: true}] } ]"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -132,7 +103,7 @@
           :wrapperCol="{ span: 24 }"
           style="text-align: right">
           <a-button @click="goBackList" style="margin-right: 20px">返回</a-button>
-          <a-button type="primary" @click="e=>updateUserById(e)">
+          <a-button type="primary" @click="e=>saveUser(e)">
             <span >确定</span>
           </a-button>
         </a-form-item>
@@ -151,7 +122,7 @@ import {
   isValidEmail,
   isValidSimplePassword
 } from '@/utils/validate'
-import { getUserById, updateUser } from '@/api/user'
+import { saveUser } from '@/api/user'
 
 export default {
   name: 'UserEdit',
@@ -173,53 +144,23 @@ export default {
         id: undefined
       },
       query: {
-        id: undefined
+        username: undefined,
+        phone: undefined,
+        nickname: undefined,
+        email: undefined,
+        password: undefined,
+        remark: undefined
       },
       record: {}
     }
   },
   mounted () {
-    this.initParamsFromRouter()
-    this.queryAndFillForm()
   },
   methods: {
-    initParamsFromRouter () {
-      Object.assign(this.routerParams, this.$route.query)
-      Object.assign(this.query, this.routerParams)
-    },
     setQueryParamsFromForm () {
       Object.assign(this.query, this.form.getFieldsValue())
     },
-    async queryAndFillForm () {
-      await this.queryUserById()
-      this.fillDataToForm(this.record)
-      Object.assign(this.query, this.record)
-    },
-    fillDataToForm (queryData) {
-      this.$nextTick(() => {
-        if (!queryData) {
-          return
-        }
-
-        const data = Object.assign({}, queryData, {
-          disable: queryData.disable !== undefined && queryData.disable.toString(),
-          locked: queryData.locked !== undefined && queryData.locked.toString()
-        })
-        setTimeout(() => {
-          this.form.setFieldsValue(data)
-        })
-      })
-    },
-    async queryUserById () {
-      this.confirmLoading = true
-      await getUserById({ id: this.query.id }).then(res => {
-        const source = { success: false, msg: undefined, data: {} }
-        Object.assign(source, res)
-        Object.assign(this.record, source.data)
-        this.confirmLoading = false
-      })
-    },
-    updateUserById (e) {
+    saveUser (e) {
       this.setQueryParamsFromForm()
       e.preventDefault()
 
@@ -229,7 +170,7 @@ export default {
           return
         }
 
-        updateUser(this.query).then(res => {
+        saveUser(this.query).then(res => {
           const source = { success: false, msg: undefined }
           Object.assign(source, res)
           if (source.success) {
@@ -252,7 +193,8 @@ export default {
     },
     validateUsername  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
-        callback()
+        const msg = '请输入用户名'
+        callback(msg)
       }
       if (!isValidUsername(value)) {
         callback(VALIDATE_ERROR_MSG.username)
@@ -273,7 +215,8 @@ export default {
     },
     validatePhone  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
-        callback()
+        const msg = '请输入手机号'
+        callback(msg)
       }
       if (!isValidPhone(value)) {
         callback(VALIDATE_ERROR_MSG.phone)
@@ -283,7 +226,8 @@ export default {
     },
     validateEmail  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
-        callback()
+        const msg = '请输入邮箱'
+        callback(msg)
       }
       if (!isValidEmail(value)) {
         callback(VALIDATE_ERROR_MSG.email)
@@ -293,7 +237,8 @@ export default {
     },
     validatePassword  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
-        callback()
+        const msg = '请输入头像URL'
+        callback(msg)
       }
       if (!isValidSimplePassword(value)) {
         callback(VALIDATE_ERROR_MSG.simplePassword)
@@ -330,21 +275,21 @@ export default {
 
 <style  lang="less" scoped>
   .account-center-avatarHolder {
-    text-align: center;
-    margin-bottom: 24px;
+       text-align: center;
+       margin-bottom: 24px;
 
-    & > .avatar {
-      margin: 0 auto;
-      width: 104px;
-      height: 104px;
-      margin-bottom: 20px;
-      border-radius: 50%;
-      overflow: hidden;
+       & > .avatar {
+         margin: 0 auto;
+         width: 104px;
+         height: 104px;
+         margin-bottom: 20px;
+         border-radius: 50%;
+         overflow: hidden;
 
-      img {
-        height: 100%;
-        width: 100%;
-      }
-    }
-  }
+         img {
+           height: 100%;
+           width: 100%;
+         }
+       }
+     }
 </style>

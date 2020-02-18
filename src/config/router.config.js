@@ -66,6 +66,12 @@ export const asyncRouterMap = [
                 name: 'UserEdit',
                 component: () => import('@/views/ums/user/UserEdit'),
                 meta: { title: '编辑用户', icon: 'edit', hidden: true, keepAlive: false }
+              },
+              {
+                path: '/ums/user/add',
+                name: 'UserAdd',
+                component: () => import('@/views/ums/user/UserAdd'),
+                meta: { title: '创建用户', icon: 'add', hidden: true, keepAlive: false }
               }
             ]
           },
