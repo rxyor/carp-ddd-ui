@@ -1,10 +1,11 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  Save: '/ums/permission/save',
-  Update: '/ums/permission/update',
   GetById: '/ums/permission/get',
   Page: '/ums/permission/page',
+  ListEnable: '/ums/permission/list/enable',
+  Save: '/ums/permission/save',
+  Update: '/ums/permission/update',
   Delete: '/ums/permission/delete',
   Disable: '/ums/permission/disable',
   Enable: '/ums/permission/enable'
@@ -12,19 +13,27 @@ const api = {
 
 export default api
 
-export function permissionPage (parameter) {
-  return axios({
-    url: api.Page,
-    method: 'post',
-    data: parameter
-  })
-}
-
 export function getPermissionById (parameter) {
   return axios({
     url: api.GetById,
     method: 'get',
     params: parameter
+  })
+}
+
+export function listEnablePermissions (parameter) {
+  return axios({
+    url: api.ListEnable,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function permissionPage (parameter) {
+  return axios({
+    url: api.Page,
+    method: 'post',
+    data: parameter
   })
 }
 

@@ -100,6 +100,12 @@ export const asyncRouterMap = [
                 name: 'RoleAdd',
                 component: () => import('@/views/ums/role/RoleAdd'),
                 meta: { title: '新建角色', icon: 'edit', hidden: true, keepAlive: false }
+              },
+              {
+                path: '/ums/role/permissions/edit',
+                name: 'RolePermissionEdit',
+                component: () => import('@/views/ums/role/RolePermissionsEdit'),
+                meta: { title: '新建角色', icon: 'edit', hidden: true, keepAlive: false }
               }
             ]
           },

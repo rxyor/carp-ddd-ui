@@ -47,22 +47,6 @@
       <span slot="disable" slot-scope="text">
         <a-badge :status="text | disableTypeFilter" :text="text | disableFilter" />
       </span>
-      <div
-        slot="expandedRowRender"
-        slot-scope="record"
-        style="margin: 0">
-        <a-row
-          :gutter="24"
-          :style="{ marginBottom: '12px' }">
-          <a-col :lg="4" :md="24">
-            <span>{{ record.roleName }}：</span>
-          </a-col>
-          <a-col :lg="20" :md="24" v-if="record.permissions.length > 0">
-            <a-tag color="cyan" v-for="(permission, k) in record.permissions" :key="k">{{ permission.permissionName }}</a-tag>
-          </a-col>
-          <a-col :span="20" v-else>-</a-col>
-        </a-row>
-      </div>
       <span slot="action" slot-scope="text, record">
         <a @click="handleEdit(record)">编辑</a>
         <a-divider type="vertical" />
@@ -71,6 +55,9 @@
             更多 <a-icon type="down" />
           </a>
           <a-menu slot="overlay">
+            <a-menu-item>
+              <a href="javascript:;" @click="handlePermissionsEdit(record.id)">授权</a>
+            </a-menu-item>
             <a-menu-item v-show="record.disable == 0">
               <a href="javascript:;" @click="handleDisable(record.id)">禁用</a>
             </a-menu-item>
@@ -199,6 +186,9 @@ export default {
     handleEdit (record) {
       this.$router.push({ name: 'RoleEdit', query: { id: record.id } })
     },
+    handlePermissionsEdit (id) {
+      this.$router.push({ name: 'RolePermissionEdit', query: { id: id } })
+    },
     handleDisable (id) {
       return disableRole({ id: id }).then(res => {
         const source = { success: false, msg: undefined }
@@ -230,6 +220,7 @@ export default {
         const source = { success: false }
         Object.assign(source, res)
         if (source.success) {
+          this.$refs.table.refresh(true)
           this.$message.info('删除角色成功')
         } else {
           this.$message.error('删除角色失败')

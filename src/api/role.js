@@ -1,13 +1,15 @@
 import { axios } from '@/utils/request'
 
 const api = {
+  GetById: '/ums/role/get',
+  GetWithPermissionsById: '/ums/role/get/with_permissions',
+  Page: '/ums/role/page',
   Save: '/ums/role/save',
   Update: '/ums/role/update',
-  GetById: '/ums/role/get',
-  Page: '/ums/role/page',
   Delete: '/ums/role/delete',
   Disable: '/ums/role/disable',
-  Enable: '/ums/role/enable'
+  Enable: '/ums/role/enable',
+  Alloc: '/ums/role/alloc'
 }
 
 export default api
@@ -23,6 +25,14 @@ export function rolePage (parameter) {
 export function getRoleById (parameter) {
   return axios({
     url: api.GetById,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getRoleWithPermissionsById (parameter) {
+  return axios({
+    url: api.GetWithPermissionsById,
     method: 'get',
     params: parameter
   })
@@ -63,6 +73,14 @@ export function saveRole (parameter) {
 export function updateRole (parameter) {
   return axios({
     url: api.Update,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function allocPermissions (parameter) {
+  return axios({
+    url: api.Alloc,
     method: 'post',
     data: parameter
   })
