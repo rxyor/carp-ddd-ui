@@ -174,7 +174,7 @@ export default {
           const source = { success: false, msg: undefined }
           Object.assign(source, res)
           if (source.success) {
-            this.$message.success('修改成功')
+            this.$message.success('添加成功')
             this.goBackList()
           }
         })

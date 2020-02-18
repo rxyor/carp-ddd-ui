@@ -53,7 +53,7 @@
 import {
   VALIDATE_ERROR_MSG,
   isValidRoleCode,
-  isValidCommonName
+  isValidShortChineseName
 } from '@/utils/validate'
 import { saveRole } from '@/api/role'
 
@@ -107,7 +107,7 @@ export default {
           const source = { success: false, msg: undefined }
           Object.assign(source, res)
           if (source.success) {
-            this.$message.success('修改成功')
+            this.$message.success('添加成功')
             this.goBackList()
           }
         })
@@ -129,8 +129,8 @@ export default {
         const msg = '请输入角色名称'
         callback(msg)
       }
-      if (!isValidCommonName(value)) {
-        callback(VALIDATE_ERROR_MSG.commonName)
+      if (!isValidShortChineseName(value)) {
+        callback(VALIDATE_ERROR_MSG.shortChineseName)
       }
       this.query.roleName = value
       callback()

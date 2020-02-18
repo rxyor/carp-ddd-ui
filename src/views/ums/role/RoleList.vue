@@ -29,7 +29,7 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-              <a-button type="primary" icon="plus" @click="$refs.createRoleModal.showForm()">新建</a-button>
+              <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
               <a-button style="margin-left: 8px" type="primary" icon="search"@click="$refs.table.refresh(true)">查询</a-button>
               <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
             </span>
@@ -193,9 +193,11 @@ export default {
     }
   },
   methods: {
+    handleAdd () {
+      this.$router.push({ name: 'RoleAdd' })
+    },
     handleEdit (record) {
-      this.currentEditRecord = Object.assign({}, record)
-      this.$refs.editRoleModal.showForm(this.currentEditRecord)
+      this.$router.push({ name: 'RoleEdit', query: { id: record.id } })
     },
     handleDisable (id) {
       return disableRole({ id: id }).then(res => {
