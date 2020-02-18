@@ -9,6 +9,7 @@ const api = {
   disable: '/role/disable/id',
   delete: '/role/delete/id',
   save: '/role/save',
+  Save: '/ums/role/save',
   Page: '/ums/role/page',
   Delete: '/ums/role/delete',
   Disable: '/ums/role/disable',
@@ -75,7 +76,7 @@ export function deleteRole (parameter) {
 
 export function saveRole (parameter) {
   return axios({
-    url: api.save,
+    url: api.Save,
     method: 'post',
     data: parameter
   })

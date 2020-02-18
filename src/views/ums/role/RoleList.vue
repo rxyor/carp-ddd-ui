@@ -169,7 +169,7 @@ export default {
           Object.assign(source, res)
 
           if (!source.success) {
-            this.$message.error('请求用户数据失败')
+            this.$message.error('请求角色数据失败')
             console.error(res)
           }
           const data = source.data
@@ -198,43 +198,41 @@ export default {
       this.$refs.editRoleModal.showForm(this.currentEditRecord)
     },
     handleDisable (id) {
-      const params = { roleId: id }
-      return disableRole(params)
-        .then(res => {
-          console.log('enableRole: ', res)
-          if (res || res.success || res.data) {
-            this.$refs.table.refresh(true)
-            this.$message.info('禁用角色成功')
-          } else {
-            this.$message.error('禁用角色失败')
-          }
-        })
+      return disableRole({ id: id }).then(res => {
+        const source = { success: false, msg: undefined }
+        Object.assign(source, res)
+
+        if (source.success) {
+          this.$refs.table.refresh(true)
+          this.$message.info('禁用角色成功')
+        } else {
+          this.$message.error('禁用角色失败')
+          console.error(res)
+        }
+      })
     },
     handleEnable (id) {
-      const params = { roleId: id }
-      return enableRole(params)
-        .then(res => {
-          if (res || res.success || res.data) {
-            this.$refs.table.refresh(true)
-            this.$message.info('启用角色成功')
-          } else {
-            this.$message.error('启用角色失败')
-          }
-        })
+      return enableRole({ id: id }).then(res => {
+        const source = { success: false }
+        Object.assign(source, res)
+        if (source.success) {
+          this.$refs.table.refresh(true)
+          this.$message.info('启用角色成功')
+        } else {
+          this.$message.error('启用角色失败')
+        }
+      })
     },
     handleDelete (id) {
-      const params = { roleId: id }
-      return deleteRole(params)
-        .then(res => {
-          if (res || res.success || res.data) {
-            this.$refs.table.refresh(true)
-            this.$message.info('删除角色成功')
-          } else {
-            this.$message.error('删除角色失败')
-          }
-        }).catch(error => {
-          this.$message.error('删除角色失败:', error)
-        })
+      return deleteRole({ id: id }).then(res => {
+        const source = { success: false }
+        Object.assign(source, res)
+        if (source.success) {
+          this.$message.info('删除角色成功')
+        } else {
+          this.$message.error('删除角色失败')
+        }
+      })
     },
     toggleAdvanced () {
       this.advanced = !this.advanced

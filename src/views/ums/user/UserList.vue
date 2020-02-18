@@ -245,8 +245,7 @@ export default {
       this.$router.push({ name: 'UserEdit', query: query })
     },
     handleDisable (id) {
-      const params = { id: id }
-      return disableUser(params).then(res => {
+      return disableUser({ id: id }).then(res => {
         const source = { success: false, msg: undefined }
         Object.assign(source, res)
 
@@ -260,8 +259,7 @@ export default {
       })
     },
     handleEnable (id) {
-      const params = { id: id }
-      return enableUser(params).then(res => {
+      return enableUser({ id: id }).then(res => {
         const source = { success: false }
         Object.assign(source, res)
         if (source.success) {
@@ -273,8 +271,7 @@ export default {
       })
     },
     handleDelete (id) {
-      const params = { id: id }
-      return deleteUser(params).then(res => {
+      return deleteUser({ id: id }).then(res => {
         const source = { success: false }
         Object.assign(source, res)
         if (source.success) {

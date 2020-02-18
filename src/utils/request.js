@@ -2,6 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
 import notification from 'ant-design-vue/es/notification'
+import router from '@/router'
 import {
   VueAxios
 } from './axios'
@@ -45,7 +46,11 @@ const err = (error) => {
       const msg = data.msg || '业务请求失败'
       notification.error({ message: '错误', description: msg })
       if (data.code === 401) {
-        this.$router.push({ path: '/user/login' })
+        store.dispatch('Logout').then(() => {
+          setTimeout(() => {
+            window.location.reload()
+          }, 1500)
+        })
       }
     }
   }
