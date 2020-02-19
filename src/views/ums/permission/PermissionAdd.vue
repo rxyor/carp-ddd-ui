@@ -58,7 +58,7 @@ import {
 import { savePermission } from '@/api/permission'
 
 export default {
-  name: 'UserEdit',
+  name: 'PermissionAdd',
   data () {
     return {
       labelCol: {

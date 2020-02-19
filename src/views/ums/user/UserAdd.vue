@@ -125,7 +125,7 @@ import {
 import { saveUser } from '@/api/user'
 
 export default {
-  name: 'UserEdit',
+  name: 'UserAdd',
   data () {
     return {
       labelCol: {

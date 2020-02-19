@@ -58,7 +58,7 @@ import {
 import { saveRole } from '@/api/role'
 
 export default {
-  name: 'UserEdit',
+  name: 'RoleAdd',
   data () {
     return {
       labelCol: {

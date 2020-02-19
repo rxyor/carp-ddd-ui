@@ -27,6 +27,19 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
+          label="应用">
+          <a-select
+            showSearch
+            placeholder="请选择"
+            name="appId"
+            @change="onAppIdChange"
+            v-decorator="[ 'appId', { rules: [ { required: true,message:'请选择应用'}] } ]">
+            <a-select-option v-for="(item, index) in appIdList" :key="index" :value="item.value">{{ item.label }}</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
           label="描述"
           hasFeedback
         >
@@ -52,13 +65,14 @@
 <script>
 import {
   VALIDATE_ERROR_MSG,
-  isValidCommonCode,
-  isValidShortChineseName
+  isValidSimpleCode,
+  isValidLongChineseName
 } from '@/utils/validate'
 import { saveKvConfig } from '@/api/kv-config'
+import { appIdOptions } from '@/api/option'
 
 export default {
-  name: 'UserEdit',
+  name: 'KvConfigAdd',
   data () {
     return {
       labelCol: {
@@ -76,18 +90,18 @@ export default {
       routerParams: {
         id: undefined
       },
+      appIdList: [],
       query: {
-        username: undefined,
-        phone: undefined,
-        nickname: undefined,
-        email: undefined,
-        password: undefined,
-        remark: undefined
+        key: undefined,
+        value: undefined,
+        appId: undefined,
+        desc: undefined
       },
       record: {}
     }
   },
   mounted () {
+    this.queryAppIdOptions()
   },
   methods: {
     setQueryParamsFromForm () {
@@ -113,15 +127,25 @@ export default {
         })
       })
     },
+    queryAppIdOptions () {
+      appIdOptions().then(res => {
+        const source = { success: false, msg: undefined, data: [] }
+        Object.assign(source, res)
+        this.appIdList = source.data
+      })
+    },
+    onAppIdChange (e) {
+      this.query.appId = e
+    },
     validateKvConfigKey  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
         const msg = '请输入key'
         callback(msg)
       }
-      if (!isValidCommonCode(value)) {
+      if (!isValidSimpleCode(value)) {
         callback(VALIDATE_ERROR_MSG.commonCode)
       }
-      this.query.kvConfigCode = value
+      this.query.key = value
       callback()
     },
     validateKvConfigValue  (rule, value, callback) {
@@ -129,17 +153,17 @@ export default {
         const msg = '请输入value'
         callback(msg)
       }
-      if (!isValidShortChineseName(value)) {
-        callback(VALIDATE_ERROR_MSG.shortChineseName)
+      if (!isValidLongChineseName(value)) {
+        callback(VALIDATE_ERROR_MSG.longChineseName)
       }
-      this.query.kvConfigName = value
+      this.query.value = value
       callback()
     },
     validateDesc  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
         callback()
       }
-      if (value.length > 255) {
+      if (value && value.length > 255) {
         const msg = '输入超出限制, 最多255个字符'
         callback(msg)
       }

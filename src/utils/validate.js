@@ -26,6 +26,11 @@ export function isValidCommonCode (str) {
   return regexp.test(str)
 }
 
+export function isValidSimpleCode (str) {
+  const regexp = /^[a-zA-Z0-9_-]{1,50}$/
+  return regexp.test(str)
+}
+
 export function isValidCommonName (str) {
   const regexp = /^[a-zA-Z0-9_-]{1,32}$/
   return regexp.test(str)
@@ -38,6 +43,11 @@ export function isValidAlphabets (str) {
 }
 
 export function isValidShortChineseName (str) {
+  const regexp = /^(?!.*[\s\n\t\\~!@#$%^&*()+-/]+).{1,32}$/
+  return regexp.test(str)
+}
+
+export function isValidLongChineseName (str) {
   const regexp = /^(?!.*[\s\n\t\\~!@#$%^&*()+-/]+).{1,32}$/
   return regexp.test(str)
 }
@@ -80,8 +90,10 @@ export function isValidRoleCode (str) {
 export const VALIDATE_ERROR_MSG = {
   url: 'url格式不正确',
   commonCode: '编码必须是3-50位大写字母、数字、_、-组成',
+  simpleCode: '编码必须是1-50位字母、数字、_、-组成',
   displayName: '昵称必须是1-16字符，且不能含有换行符空格\\~!@#$%^&*()+-/等特殊字符',
   shortChineseName: '请键入1-32字符，且不能含有换行符空格\\~!@#$%^&*()+-/等特殊字符',
+  longChineseName: '请键入1-256字符，且不能含有换行符空格\\~!@#$%^&*()+-/等特殊字符',
   username: '用户名必须是4-16位字母、数字、下划线组成',
   commonName: '输入必须是1-32位字母、数字、_、-组成',
   simplePassword: '密码必须是6-12位字母、数字组合，且分包含1个字母、1个数字',
