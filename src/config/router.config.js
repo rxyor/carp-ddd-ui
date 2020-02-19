@@ -148,21 +148,34 @@ export const asyncRouterMap = [
             name: 'ClientList',
             component: () => import('@/views/ums/ClientList'),
             meta: { title: '客户端列表', icon: 'key', keepAlive: true }
-          }
-        ]
-      },
-      {
-        path: '/config',
-        name: 'CONFIG',
-        component: PageView,
-        meta: { title: '配置管理', icon: 'setting', permission: ['dashboard'] },
-        redirect: '/config/kv-config-list',
-        children: [
+          },
           {
-            path: '/config/kv-config-list',
-            name: 'KvConfigList',
-            component: () => import('@/views/config/KvConfigList'),
-            meta: { title: '键值配置', icon: 'tool', keepAlive: true }
+            path: '/ums/kv-config',
+            name: 'UmsKvConfig',
+            component: RouteView,
+            meta: { title: '配置管理', icon: 'setting', keepAlive: true },
+            redirect: '/ums/kv-config/list',
+            hideChildrenInMenu: true,
+            children: [
+              {
+                path: '/ums/kv-config/list',
+                name: 'KvConfigList',
+                component: () => import('@/views/ums/kvconfig/KvConfigList'),
+                meta: { title: '配置列表', icon: 'tool', keepAlive: true }
+              },
+              {
+                path: '/ums/kv-config/edit',
+                name: 'KvConfigEdit',
+                component: () => import('@/views/ums/kvconfig/KvConfigEdit'),
+                meta: { title: '编辑配置', icon: 'tool', keepAlive: true }
+              },
+              {
+                path: '/ums/kv-config/add',
+                name: 'KvConfigAdd',
+                component: () => import('@/views/ums/kvconfig/KvConfigAdd'),
+                meta: { title: '新建配置', icon: 'tool', keepAlive: true }
+              }
+            ]
           }
         ]
       },

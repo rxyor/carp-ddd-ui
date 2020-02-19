@@ -1,19 +1,19 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  queryPage: '/kv_config/query/page',
+  Page: '/ums/kvconfig/page',
+  Save: '/ums/kvconfig/save',
+  Update: '/ums/kvconfig/update',
+  Delete: '/ums/kvconfig/delete',
   listAllType: '/kv_config/list/all/type',
-  listByType: '/kv_config/list/type',
-  delete: '/kv_config/delete/id',
-  save: '/kv_config/save',
-  update: '/kv_config/update'
+  listByType: '/kv_config/list/type'
 }
 
 export default api
 
-export function queryKvConfigByPage (parameter) {
+export function kvConfigPage (parameter) {
   return axios({
-    url: api.queryPage,
+    url: api.Page,
     method: 'post',
     data: parameter
   })
@@ -33,17 +33,9 @@ export function listKvConfigByType (parameter) {
   })
 }
 
-export function deleteKvConfig (parameter) {
-  return axios({
-    url: api.delete,
-    method: 'post',
-    params: parameter
-  })
-}
-
 export function saveKvConfig (parameter) {
   return axios({
-    url: api.save,
+    url: api.Save,
     method: 'post',
     data: parameter
   })
@@ -51,8 +43,16 @@ export function saveKvConfig (parameter) {
 
 export function updateKvConfig (parameter) {
   return axios({
-    url: api.update,
+    url: api.Update,
     method: 'post',
     data: parameter
+  })
+}
+
+export function deleteKvConfig (parameter) {
+  return axios({
+    url: api.Delete,
+    method: 'post',
+    params: parameter
   })
 }
