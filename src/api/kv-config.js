@@ -3,6 +3,7 @@ import { axios } from '@/utils/request'
 const api = {
   Page: '/ums/kvconfig/page',
   GetById: '/ums/kvconfig/get',
+  FindByKeyAndAppId: '/ums/kvconfig/list/key',
   Save: '/ums/kvconfig/save',
   Update: '/ums/kvconfig/update',
   Delete: '/ums/kvconfig/delete'
@@ -21,6 +22,14 @@ export function kvConfigPage (parameter) {
 export function getKvConfigById (parameter) {
   return axios({
     url: api.GetById,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function findByKeyAndAppId (parameter) {
+  return axios({
+    url: api.FindByKeyAndAppId,
     method: 'get',
     params: parameter
   })

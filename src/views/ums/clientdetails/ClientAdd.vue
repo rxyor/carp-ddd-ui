@@ -5,48 +5,39 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="key"
+          label="客户端ID"
           hasFeedback
         >
           <a-input
             placeholder="请输入"
-            name="key"
-            v-decorator="[ 'key', { rules: [ { validator: validateKey, required: true}] } ]"/>
+            name="clientId"
+            v-decorator="[ 'clientId', { rules: [ { required:true, validator: validateClientId, }] } ]"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="value"
+          label="客户端密码"
           hasFeedback
         >
           <a-input
             placeholder="请输入"
-            name="value"
-            v-decorator="[ 'value', { rules: [ { validator: validateValue, required: true}] } ]"/>
+            name="clientSecret"
+            v-decorator="[ 'clientSecret', { rules: [ { required:true, validator: validateSecret, }] } ]"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="应用">
+          label="授权方式"
+          hasFeedback
+        >
           <a-select
             showSearch
+            mode="multiple"
             placeholder="请选择"
-            name="appId"
-            @change="onAppIdChange"
-            v-decorator="[ 'appId', { rules: [ { required: true,message:'请选择应用'}] } ]">
-            <a-select-option v-for="(item, index) in appIdList" :key="index" :value="item.value">{{ item.label }}</a-select-option>
+            name="authorizedGrantTypeList"
+            v-decorator="[ 'authorizedGrantTypeList', { rules: [ { required:true,message:'请至少选择一项' }] } ]">
+            <a-select-option v-for="(item, index) in grantTypeKvConfigList" :key="index" :value="item.value">{{ item.desc }}</a-select-option>
           </a-select>
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="描述"
-          hasFeedback
-        >
-          <a-textarea
-            placeholder="请输入"
-            :autosize="textAreaSize"
-            v-decorator="[ 'desc', { rules: [{validator:validateDesc} ] } ]"/>
         </a-form-item>
         <a-divider :dashed="true"/>
         <a-form-item
@@ -66,10 +57,11 @@
 import {
   VALIDATE_ERROR_MSG,
   isValidSimpleCode,
-  isValidLongChineseName
+  isValidClientSecret
 } from '@/utils/validate'
 import { saveClient } from '@/api/client'
-import { appIdOptions } from '@/api/option'
+import { findByKeyAndAppId } from '@/api/kv-config'
+import { appIdOptions, authorityOptions } from '@/api/option'
 
 export default {
   name: 'ClientAdd',
@@ -87,9 +79,11 @@ export default {
       form: this.$form.createForm(this),
       confirmLoading: false,
 
-      routerParams: {
-        id: undefined
-      },
+      grantTypeKvConfigList: [],
+      autoApproveKvConfigList: [],
+      scopeKvConfigList: [],
+      fetchAuthorityList: [],
+
       appIdList: [],
       query: {
         key: undefined,
@@ -101,9 +95,12 @@ export default {
     }
   },
   mounted () {
-    this.queryAppIdOptions()
+    this.init()
   },
   methods: {
+    init () {
+      this.fetchKvConfigOptions()
+    },
     setQueryParamsFromForm () {
       Object.assign(this.query, this.form.getFieldsValue())
     },
@@ -127,8 +124,35 @@ export default {
         })
       })
     },
+    fetchKvConfigOptions () {
+      findByKeyAndAppId({ key: 'OAUTH2_GRANT_TYPE' }).then(res => {
+        const source = { success: false, msg: undefined, data: [] }
+        Object.assign(source, res)
+        this.grantTypeKvConfigList = source.data
+      })
+      findByKeyAndAppId({ key: 'OAUTH2_AUTO_APPROVE' }).then(res => {
+        const source = { success: false, msg: undefined, data: [] }
+        Object.assign(source, res)
+        this.autoApproveKvConfigList = source.data
+      })
+      findByKeyAndAppId({ key: 'OAUTH2_SCOPE' }).then(res => {
+        const source = { success: false, msg: undefined, data: [] }
+        Object.assign(source, res)
+        this.scopeKvConfigList = source.data
+      })
+    },
     queryAppIdOptions () {
       appIdOptions().then(res => {
+        const source = { success: false, msg: undefined, data: [] }
+        Object.assign(source, res)
+        this.appIdList = source.data
+      })
+    },
+    queryAuthorityOptions (keyword) {
+      if (!keyword || keyword === '') {
+        return
+      }
+      authorityOptions({ keyword: keyword }).then(res => {
         const source = { success: false, msg: undefined, data: [] }
         Object.assign(source, res)
         this.appIdList = source.data
@@ -137,9 +161,9 @@ export default {
     onAppIdChange (e) {
       this.query.appId = e
     },
-    validateKey  (rule, value, callback) {
+    validateClientId  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
-        const msg = '请输入key'
+        const msg = '请输入客户端ID'
         callback(msg)
       }
       if (!isValidSimpleCode(value)) {
@@ -148,13 +172,13 @@ export default {
       this.query.key = value
       callback()
     },
-    validateValue  (rule, value, callback) {
+    validateSecret  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
-        const msg = '请输入value'
+        const msg = '请输入密码'
         callback(msg)
       }
-      if (!isValidLongChineseName(value)) {
-        callback(VALIDATE_ERROR_MSG.longChineseName)
+      if (!isValidClientSecret(value)) {
+        callback(VALIDATE_ERROR_MSG.clientSecret)
       }
       this.query.value = value
       callback()

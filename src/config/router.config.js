@@ -155,7 +155,7 @@ export const asyncRouterMap = [
                 path: '/ums/client/list',
                 name: 'ClientList',
                 component: () => import('@/views/ums/clientdetails/ClientList'),
-                meta: { title: '客户端列表', icon: 'tool', keepAlive: true }
+                meta: { title: '客户端列表', icon: 'tool', keepAlive: false }
               },
               {
                 path: '/ums/client/edit',
@@ -189,13 +189,13 @@ export const asyncRouterMap = [
                 path: '/ums/kv-config/edit',
                 name: 'KvConfigEdit',
                 component: () => import('@/views/ums/kvconfig/KvConfigEdit'),
-                meta: { title: '编辑配置', icon: 'tool', keepAlive: true }
+                meta: { title: '编辑配置', icon: 'tool', keepAlive: false }
               },
               {
                 path: '/ums/kv-config/add',
                 name: 'KvConfigAdd',
                 component: () => import('@/views/ums/kvconfig/KvConfigAdd'),
-                meta: { title: '新建配置', icon: 'tool', keepAlive: true }
+                meta: { title: '新建配置', icon: 'tool', keepAlive: false }
               }
             ]
           }

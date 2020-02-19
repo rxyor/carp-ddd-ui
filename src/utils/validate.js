@@ -62,6 +62,11 @@ export function isValidUsername (str) {
   return regexp.test(str)
 }
 
+export function isValidClientSecret (str) {
+  const regexp = /^[{}a-zA-Z0-9_]{4,30}$/
+  return regexp.test(str)
+}
+
 export function isValidSimplePassword (str) {
   const regexp = /^(?![\d]+$)(?![a-zA-Z]+$)[\da-zA-Z]{6,12}$/
   return regexp.test(str)
@@ -95,6 +100,7 @@ export const VALIDATE_ERROR_MSG = {
   shortChineseName: '请键入1-32字符，且不能含有换行符空格\\~!@#$%^&*()+-/等特殊字符',
   longChineseName: '请键入1-256字符，且不能含有换行符空格\\~!@#$%^&*()+-/等特殊字符',
   username: '用户名必须是4-16位字母、数字、下划线组成',
+  clientSecret: '客户端密码必须是4-40字符、数字、下划线、{}-等字符组成',
   commonName: '输入必须是1-32位字母、数字、_、-组成',
   simplePassword: '密码必须是6-12位字母、数字组合，且分包含1个字母、1个数字',
   confirmPassword: '两次输入密码不一致',
