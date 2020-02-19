@@ -3,6 +3,7 @@ import { axios } from '@/utils/request'
 const api = {
   GetById: '/ums/role/get',
   GetWithPermissionsById: '/ums/role/get/with_permissions',
+  ListEnable: '/ums/role/list/enable',
   Page: '/ums/role/page',
   Save: '/ums/role/save',
   Update: '/ums/role/update',
@@ -13,14 +14,6 @@ const api = {
 }
 
 export default api
-
-export function rolePage (parameter) {
-  return axios({
-    url: api.Page,
-    method: 'post',
-    data: parameter
-  })
-}
 
 export function getRoleById (parameter) {
   return axios({
@@ -35,6 +28,22 @@ export function getRoleWithPermissionsById (parameter) {
     url: api.GetWithPermissionsById,
     method: 'get',
     params: parameter
+  })
+}
+
+export function listEnableRoles (parameter) {
+  return axios({
+    url: api.ListEnable,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function rolePage (parameter) {
+  return axios({
+    url: api.Page,
+    method: 'post',
+    data: parameter
   })
 }
 

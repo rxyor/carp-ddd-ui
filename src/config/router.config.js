@@ -72,6 +72,12 @@ export const asyncRouterMap = [
                 name: 'UserAdd',
                 component: () => import('@/views/ums/user/UserAdd'),
                 meta: { title: '创建用户', icon: 'add', hidden: true, keepAlive: false }
+              },
+              {
+                path: '/ums/user/roles/edit',
+                name: 'UserRolesEdit',
+                component: () => import('@/views/ums/user/UserRolesEdit'),
+                meta: { title: '分配角色', icon: 'edit', hidden: true, keepAlive: false }
               }
             ]
           },
@@ -103,9 +109,9 @@ export const asyncRouterMap = [
               },
               {
                 path: '/ums/role/permissions/edit',
-                name: 'RolePermissionEdit',
+                name: 'RolePermissionsEdit',
                 component: () => import('@/views/ums/role/RolePermissionsEdit'),
-                meta: { title: '新建角色', icon: 'edit', hidden: true, keepAlive: false }
+                meta: { title: '分配权限', icon: 'edit', hidden: true, keepAlive: false }
               }
             ]
           },

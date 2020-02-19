@@ -1,15 +1,15 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  delete: '/user/delete/id',
-  save: '/user/save',
+  GetById: '/ums/user/get',
+  GetWithRolesById: '/ums/user/get/with_roles',
+  Page: '/ums/user/page',
   Save: '/ums/user/save',
   Update: '/ums/user/update',
-  GetById: '/ums/user/get',
-  Page: '/ums/user/page',
   Delete: '/ums/user/delete',
   Enable: '/ums/user/enable',
-  Disable: '/ums/user/disable'
+  Disable: '/ums/user/disable',
+  Alloc: '/ums/user/alloc'
 }
 
 export default api
@@ -30,11 +30,27 @@ export function getUserById (parameter) {
   })
 }
 
-export function getUserList (parameter) {
+export function getUserWithRolesById (parameter) {
   return axios({
-    url: api.user,
+    url: api.GetWithRolesById,
     method: 'get',
     params: parameter
+  })
+}
+
+export function saveUser (parameter) {
+  return axios({
+    url: api.Save,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function updateUser (parameter) {
+  return axios({
+    url: api.Update,
+    method: 'post',
+    data: parameter
   })
 }
 
@@ -62,17 +78,9 @@ export function deleteUser (parameter) {
   })
 }
 
-export function saveUser (parameter) {
+export function allocRoles (parameter) {
   return axios({
-    url: api.Save,
-    method: 'post',
-    data: parameter
-  })
-}
-
-export function updateUser (parameter) {
-  return axios({
-    url: api.Update,
+    url: api.Alloc,
     method: 'post',
     data: parameter
   })

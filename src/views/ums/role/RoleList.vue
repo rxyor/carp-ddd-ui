@@ -187,7 +187,7 @@ export default {
       this.$router.push({ name: 'RoleEdit', query: { id: record.id } })
     },
     handlePermissionsEdit (id) {
-      this.$router.push({ name: 'RolePermissionEdit', query: { id: id } })
+      this.$router.push({ name: 'RolePermissionsEdit', query: { id: id } })
     },
     handleDisable (id) {
       return disableRole({ id: id }).then(res => {

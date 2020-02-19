@@ -21,6 +21,14 @@ export function getPermissionById (parameter) {
   })
 }
 
+export function permissionPage (parameter) {
+  return axios({
+    url: api.Page,
+    method: 'post',
+    data: parameter
+  })
+}
+
 export function listEnablePermissions (parameter) {
   return axios({
     url: api.ListEnable,
@@ -29,9 +37,17 @@ export function listEnablePermissions (parameter) {
   })
 }
 
-export function permissionPage (parameter) {
+export function savePermission (parameter) {
   return axios({
-    url: api.Page,
+    url: api.Save,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function updatePermission (parameter) {
+  return axios({
+    url: api.Update,
     method: 'post',
     data: parameter
   })
@@ -58,21 +74,5 @@ export function deletePermission (parameter) {
     url: api.Delete,
     method: 'post',
     params: parameter
-  })
-}
-
-export function savePermission (parameter) {
-  return axios({
-    url: api.Save,
-    method: 'post',
-    data: parameter
-  })
-}
-
-export function updatePermission (parameter) {
-  return axios({
-    url: api.Update,
-    method: 'post',
-    data: parameter
   })
 }

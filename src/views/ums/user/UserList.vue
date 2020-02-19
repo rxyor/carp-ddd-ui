@@ -72,6 +72,9 @@
             更多 <a-icon type="down" />
           </a>
           <a-menu slot="overlay">
+            <a-menu-item>
+              <a href="javascript:;" @click="handleRolesEdit(record.id)">授权</a>
+            </a-menu-item>
             <a-menu-item v-show="record.disable == 0">
               <a href="javascript:;" @click="handleDisable(record.id)">禁用</a>
             </a-menu-item>
@@ -79,7 +82,7 @@
               <a href="javascript:;"@click="handleEnable(record.id)">启用</a>
             </a-menu-item>
             <a-menu-item>
-              <a href="javascript:;" @click="handleDelete(record.id)">删除</a>
+              <a style="color: red" href="javascript:;" @click="handleDelete(record.id)">删除</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
@@ -243,6 +246,9 @@ export default {
     handleEdit (record) {
       const query = { id: record.id }
       this.$router.push({ name: 'UserEdit', query: query })
+    },
+    handleRolesEdit (id) {
+      this.$router.push({ name: 'UserRolesEdit', query: { id: id } })
     },
     handleDisable (id) {
       return disableUser({ id: id }).then(res => {
