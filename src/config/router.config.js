@@ -144,10 +144,32 @@ export const asyncRouterMap = [
             ]
           },
           {
-            path: '/ums/client-list',
-            name: 'ClientList',
-            component: () => import('@/views/ums/ClientList'),
-            meta: { title: '客户端列表', icon: 'key', keepAlive: true }
+            path: '/ums/Client',
+            name: 'UmsClient',
+            component: RouteView,
+            meta: { title: '客户端管理', icon: 'setting', keepAlive: true },
+            redirect: '/ums/client/list',
+            hideChildrenInMenu: true,
+            children: [
+              {
+                path: '/ums/client/list',
+                name: 'ClientList',
+                component: () => import('@/views/ums/clientdetails/ClientList'),
+                meta: { title: '客户端列表', icon: 'tool', keepAlive: true }
+              },
+              {
+                path: '/ums/client/edit',
+                name: 'ClientEdit',
+                component: () => import('@/views/ums/clientdetails/ClientEdit'),
+                meta: { title: '编辑客户端', icon: 'tool', keepAlive: true }
+              },
+              {
+                path: '/ums/client/add',
+                name: 'ClientAdd',
+                component: () => import('@/views/ums/clientdetails/ClientAdd'),
+                meta: { title: '新建客户端', icon: 'tool', keepAlive: true }
+              }
+            ]
           },
           {
             path: '/ums/kv-config',

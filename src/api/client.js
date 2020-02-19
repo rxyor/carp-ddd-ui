@@ -1,51 +1,51 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  queryPage: '/client_detail/query/page',
-  queryAuthoritiesByCode: '/client_detail/query/authorities/code',
-  save: '/client_detail/save',
-  update: '/client_detail/update',
-  delete: '/client_detail/delete/id'
+  Page: '/ums/client/page',
+  GetById: '/ums/client/get',
+  Save: '/ums/client/save',
+  Update: '/ums/client/update',
+  Delete: '/ums/client/delete'
 }
 
 export default api
 
-export function queryClientDetailByPage (parameter) {
+export function clientPage (parameter) {
   return axios({
-    url: api.queryPage,
+    url: api.Page,
     method: 'post',
     data: parameter
   })
 }
 
-export function queryClientAuthoritiesByCode (parameter) {
+export function getClientById (parameter) {
   return axios({
-    url: api.queryAuthoritiesByCode,
+    url: api.GetById,
     method: 'get',
     params: parameter
   })
 }
 
-export function saveClientDetail (parameter) {
+export function saveClient (parameter) {
   return axios({
-    url: api.save,
+    url: api.Save,
     method: 'post',
     data: parameter
   })
 }
 
-export function deleteClientDetail (parameter) {
+export function updateClient (parameter) {
   return axios({
-    url: api.delete,
+    url: api.Update,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function deleteClient (parameter) {
+  return axios({
+    url: api.Delete,
     method: 'post',
     params: parameter
-  })
-}
-
-export function updateClientDetail (parameter) {
-  return axios({
-    url: api.update,
-    method: 'post',
-    data: parameter
   })
 }
