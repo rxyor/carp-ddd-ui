@@ -65,7 +65,7 @@
               <a href="javascript:;"@click="handleEnable(record.id)">启用</a>
             </a-menu-item>
             <a-menu-item>
-              <a href="javascript:;" @click="handleDelete(record.id)">删除</a>
+              <a style="color: red" href="javascript:;" @click="handleDelete(record.id)">删除</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>

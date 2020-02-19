@@ -17,13 +17,13 @@ export const asyncRouterMap = [
         name: 'dashboard',
         redirect: '/dashboard/workplace',
         component: RouteView,
-        meta: { title: '仪表盘', keepAlive: true, icon: bxAnaalyse, permission: ['ROLE_admin'] },
+        meta: { title: '仪表盘', keepAlive: true, icon: bxAnaalyse },
         children: [
           {
             path: '/dashboard/analysis',
             name: 'Analysis',
             component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '分析页', keepAlive: false, permission: ['ROLE_admin'] }
+            meta: { title: '分析页', keepAlive: false, permission: ['ROLE_ROOT'] }
           },
           // 外部链接
           {
@@ -35,7 +35,7 @@ export const asyncRouterMap = [
             path: '/dashboard/workplace',
             name: 'Workplace',
             component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: '工作台', keepAlive: true, permission: ['ROLE_admin'] }
+            meta: { title: '工作台', keepAlive: true, permission: ['ROLE_ROOT'] }
           }
         ]
       },
@@ -44,7 +44,7 @@ export const asyncRouterMap = [
         path: '/ums',
         name: 'ums',
         component: PageView,
-        meta: { title: '用户权限管理', icon: 'safety', permission: ['ROLE_admin'] },
+        meta: { title: '用户权限管理', icon: 'safety', permission: ['ROLE_ROOT'] },
         redirect: '/ums/user',
         children: [
           {
@@ -333,19 +333,19 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/account/center',
         name: 'account',
-        meta: { title: '个人页', icon: 'user', keepAlive: true, permission: ['ROLE_admin'] },
+        meta: { title: '个人页', icon: 'user', keepAlive: true, permission: ['ROLE_ROOT'] },
         children: [
           {
             path: '/account/center',
             name: 'center',
             component: () => import('@/views/account/center/Index'),
-            meta: { title: '个人中心', keepAlive: true, permission: ['ROLE_admin'] }
+            meta: { title: '个人中心', keepAlive: true, permission: ['ROLE_ROOT'] }
           },
           {
             path: '/account/settings',
             name: 'settings',
             component: () => import('@/views/account/settings/Index'),
-            meta: { title: '个人设置', hideHeader: true, permission: ['ROLE_admin'] },
+            meta: { title: '个人设置', hideHeader: true, permission: ['ROLE_ROOT'] },
             redirect: '/account/settings/base',
             hideChildrenInMenu: true,
             children: [
@@ -353,31 +353,31 @@ export const asyncRouterMap = [
                 path: '/account/settings/base',
                 name: 'BaseSettings',
                 component: () => import('@/views/account/settings/BaseSetting'),
-                meta: { title: '基本设置', hidden: true, permission: ['ROLE_admin'] }
+                meta: { title: '基本设置', hidden: true, permission: ['ROLE_ROOT'] }
               },
               {
                 path: '/account/settings/security',
                 name: 'SecuritySettings',
                 component: () => import('@/views/account/settings/Security'),
-                meta: { title: '安全设置', hidden: true, keepAlive: true, permission: ['ROLE_admin'] }
+                meta: { title: '安全设置', hidden: true, keepAlive: true, permission: ['ROLE_ROOT'] }
               },
               {
                 path: '/account/settings/custom',
                 name: 'CustomSettings',
                 component: () => import('@/views/account/settings/Custom'),
-                meta: { title: '个性化设置', hidden: true, keepAlive: true, permission: ['ROLE_admin'] }
+                meta: { title: '个性化设置', hidden: true, keepAlive: true, permission: ['ROLE_ROOT'] }
               },
               {
                 path: '/account/settings/binding',
                 name: 'BindingSettings',
                 component: () => import('@/views/account/settings/Binding'),
-                meta: { title: '账户绑定', hidden: true, keepAlive: true, permission: ['ROLE_admin'] }
+                meta: { title: '账户绑定', hidden: true, keepAlive: true, permission: ['ROLE_ROOT'] }
               },
               {
                 path: '/account/settings/notification',
                 name: 'NotificationSettings',
                 component: () => import('@/views/account/settings/Notification'),
-                meta: { title: '新消息通知', hidden: true, keepAlive: true, permission: ['ROLE_admin'] }
+                meta: { title: '新消息通知', hidden: true, keepAlive: true, permission: ['ROLE_ROOT'] }
               }
             ]
           }
@@ -389,14 +389,14 @@ export const asyncRouterMap = [
         path: '/other',
         name: 'otherPage',
         component: PageView,
-        meta: { title: '其他组件', icon: 'slack', permission: ['ROLE_admin'] },
+        meta: { title: '其他组件', icon: 'slack', permission: ['ROLE_ROOT'] },
         redirect: '/other/icon-selector',
         children: [
           {
             path: '/other/icon-selector',
             name: 'TestIconSelect',
             component: () => import('@/views/other/IconSelectorView'),
-            meta: { title: 'IconSelector', icon: 'tool', keepAlive: true, permission: ['ROLE_admin'] }
+            meta: { title: 'IconSelector', icon: 'tool', keepAlive: true, permission: ['ROLE_ROOT'] }
           }
         ]
       }
