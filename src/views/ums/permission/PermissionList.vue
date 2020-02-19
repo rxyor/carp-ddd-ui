@@ -47,22 +47,6 @@
       <span slot="disable" slot-scope="text">
         <a-badge :status="text | disableTypeFilter" :text="text | disableFilter" />
       </span>
-      <div
-        slot="expandedRowRender"
-        slot-scope="record"
-        style="margin: 0">
-        <a-row
-          :gutter="24"
-          :style="{ marginBottom: '12px' }">
-          <a-col :lg="4" :md="24">
-            <span>{{ record.permissionName }}：</span>
-          </a-col>
-          <a-col :lg="20" :md="24" v-if="record.permissions.length > 0">
-            <a-tag color="cyan" v-for="(permission, k) in record.permissions" :key="k">{{ permission.permissionName }}</a-tag>
-          </a-col>
-          <a-col :span="20" v-else>-</a-col>
-        </a-row>
-      </div>
       <span slot="action" slot-scope="text, record">
         <a @click="handleEdit(record)">编辑</a>
         <a-divider type="vertical" />

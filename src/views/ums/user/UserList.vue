@@ -14,6 +14,16 @@
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
+            <a-form-item label="手机号">
+              <a-input v-model="queryParam.phone" placeholder="请输入"/>
+            </a-form-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-item label="邮箱">
+              <a-input v-model="queryParam.email" placeholder="请输入"/>
+            </a-form-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
             <a-form-item label="状态">
               <a-select v-model="queryParam.disable" placeholder="请选择" default-value="">
                 <a-select-option value="">全部</a-select-option>
@@ -46,24 +56,6 @@
       <span slot="locked" slot-scope="text">
         <a-badge :status="text | lockedTypeFilter" :text="text | lockedFilter" />
       </span>
-      <div
-        slot="expandedRowRender"
-        slot-scope="record"
-        style="margin: 0">
-        <a-row
-          :gutter="24"
-          :style="{ marginBottom: '12px' }">
-          <a-col :span="12" v-for="(role, index) in record.roles" :key="index" :style="{ marginBottom: '12px' }">
-            <a-col :lg="4" :md="24">
-              <span>{{ role.roleName }}：</span>
-            </a-col>
-            <a-col :lg="20" :md="24" v-if="role.permissions.length > 0">
-              <a-tag color="cyan" v-for="(permission, k) in role.permissions" :key="k">{{ permission.permissionName }}</a-tag>
-            </a-col>
-            <a-col :span="20" v-else>-</a-col>
-          </a-col>
-        </a-row>
-      </div>
       <span slot="action" slot-scope="text, record">
         <a @click="handleEdit(record)">编辑</a>
         <a-divider type="vertical" />
@@ -127,8 +119,6 @@ export default {
   },
   data () {
     return {
-      editVisible: false,
-      addVisible: false,
       labelCol: {
         xs: { span: 24 },
         sm: { span: 5 }
@@ -138,19 +128,13 @@ export default {
         sm: { span: 16 }
       },
       form: null,
-      mdl: {},
+      advanced: false,
       transfer: {
         allRoles: [
         ],
         targetKeys: []
       },
-      // 当前编辑用户
-      currentEditRecord: {},
-      // 高级搜索 展开/关闭
-      advanced: false,
-      // 查询参数
       queryParam: { page: 1, pageSize: 10 },
-      // 表头
       columns: [
         {
           title: '#',
@@ -281,6 +265,7 @@ export default {
         const source = { success: false }
         Object.assign(source, res)
         if (source.success) {
+          this.$refs.table.refresh(true)
           this.$message.info('删除用户成功')
         } else {
           this.$message.error('删除用户失败')
