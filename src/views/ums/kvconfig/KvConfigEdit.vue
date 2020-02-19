@@ -9,56 +9,57 @@
           hasFeedback
         >
           <a-input
-            placeholder="请输入id"
+            placeholder="请输入"
             name="id"
             v-decorator="[ 'id', { rules: [ { required: true}] } ]"
-            disabled="disabled" />
+            disabled="disabled"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="权限编码"
+          label="key"
           hasFeedback
         >
           <a-input
-            placeholder="请输入权限编码"
-            name="kvConfigCode"
-            v-decorator="[ 'kvConfigCode', { rules: [ { validator: validateKvConfigCode, required: true}] } ]"
-            disabled="disabled" />
+            placeholder="请输入"
+            name="key"
+            v-decorator="[ 'key', { rules: [ { validator: validateKey, required: true}] } ]"
+            disabled="disabled"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="权限名称"
-          hasFeedback>
-          <a-input
-            placeholder="请输入权限名称"
-            name="kvConfigName"
-            v-decorator="[ 'kvConfigName', { rules: [ { validator: validateKvConfigName, required: true}] } ]"/>
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="禁用状态"
+          label="value"
           hasFeedback
-          validateStatus="warning"
         >
+          <a-input
+            placeholder="请输入"
+            name="value"
+            v-decorator="[ 'value', { rules: [ { validator: validateValue, required: true}] } ]"/>
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="应用">
           <a-select
-            v-decorator="['disable', {rules: [{ required: true, message: '请选择状态' }]}]">
-            <a-select-option value="0">正常</a-select-option>
-            <a-select-option value="1">禁用</a-select-option>
+            showSearch
+            placeholder="请选择"
+            name="appId"
+            @change="onAppIdChange"
+            v-decorator="[ 'appId', { rules: [ { required: true,message:'请选择应用'}] } ]">
+            <a-select-option v-for="(item, index) in appIdList" :key="index" :value="item.value">{{ item.label }}</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="备注"
+          label="描述"
           hasFeedback
         >
           <a-textarea
-            placeholder="请输入备注"
+            placeholder="请输入"
             :autosize="textAreaSize"
-            v-decorator="[ 'remark', { rules: [{validator:validateRemark} ] } ]"/>
+            v-decorator="[ 'desc', { rules: [{validator:validateDesc} ] } ]"/>
         </a-form-item>
         <a-divider :dashed="true"/>
         <a-form-item
@@ -77,10 +78,11 @@
 <script>
 import {
   VALIDATE_ERROR_MSG,
-  isValidKvConfigCode,
-  isValidShortChineseName
+  isValidSimpleCode,
+  isValidLongChineseName
 } from '@/utils/validate'
 import { updateKvConfig, getKvConfigById } from '@/api/kv-config'
+import { appIdOptions } from '@/api/option'
 
 export default {
   name: 'KvConfigEdit',
@@ -101,8 +103,13 @@ export default {
       routerParams: {
         id: undefined
       },
+      appIdList: [],
       query: {
-        id: undefined
+        id: undefined,
+        key: undefined,
+        value: undefined,
+        appId: undefined,
+        desc: undefined
       },
       record: {}
     }
@@ -130,9 +137,7 @@ export default {
           return
         }
 
-        const data = Object.assign({}, queryData, {
-          disable: queryData.disable !== undefined && queryData.disable.toString()
-        })
+        const data = Object.assign({}, queryData)
         setTimeout(() => {
           this.form.setFieldsValue(data)
         })
@@ -166,32 +171,43 @@ export default {
         })
       })
     },
-    validateKvConfigCode  (rule, value, callback) {
-      if (value === null || value === undefined || value === '') {
-        callback()
-      }
-      if (!isValidKvConfigCode(value)) {
-        callback(VALIDATE_ERROR_MSG.kvConfigCode)
-      }
-      this.query.kvConfigCode = value
-      callback()
+    queryAppIdOptions () {
+      appIdOptions().then(res => {
+        const source = { success: false, msg: undefined, data: [] }
+        Object.assign(source, res)
+        this.appIdList = source.data
+      })
     },
-    validateKvConfigName  (rule, value, callback) {
+    onAppIdChange (e) {
+      this.query.appId = e
+    },
+    validateKey  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
-        const msg = '请输入权限名称'
+        const msg = '请输入key'
         callback(msg)
       }
-      if (!isValidShortChineseName(value)) {
-        callback(VALIDATE_ERROR_MSG.shortChineseName)
+      if (!isValidSimpleCode(value)) {
+        callback(VALIDATE_ERROR_MSG.commonCode)
       }
-      this.query.kvConfigName = value
+      this.query.key = value
       callback()
     },
-    validateRemark  (rule, value, callback) {
+    validateValue  (rule, value, callback) {
+      if (value === null || value === undefined || value === '') {
+        const msg = '请输入value'
+        callback(msg)
+      }
+      if (!isValidLongChineseName(value)) {
+        callback(VALIDATE_ERROR_MSG.longChineseName)
+      }
+      this.query.value = value
+      callback()
+    },
+    validateDesc  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
         callback()
       }
-      if (value.length > 255) {
+      if (value && value.length > 255) {
         const msg = '输入超出限制, 最多255个字符'
         callback(msg)
       }

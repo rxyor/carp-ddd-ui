@@ -2,11 +2,10 @@ import { axios } from '@/utils/request'
 
 const api = {
   Page: '/ums/kvconfig/page',
+  GetById: '/ums/kvconfig/get',
   Save: '/ums/kvconfig/save',
   Update: '/ums/kvconfig/update',
-  Delete: '/ums/kvconfig/delete',
-  listAllType: '/kv_config/list/all/type',
-  listByType: '/kv_config/list/type'
+  Delete: '/ums/kvconfig/delete'
 }
 
 export default api
@@ -19,15 +18,9 @@ export function kvConfigPage (parameter) {
   })
 }
 
-export function listAllKvConfigType () {
+export function getKvConfigById (parameter) {
   return axios({
-    url: api.listAllType,
-    method: 'get'
-  })
-}
-export function listKvConfigByType (parameter) {
-  return axios({
-    url: api.listByType,
+    url: api.GetById,
     method: 'get',
     params: parameter
   })

@@ -11,7 +11,7 @@
           <a-input
             placeholder="请输入"
             name="key"
-            v-decorator="[ 'key', { rules: [ { validator: validateKvConfigKey, required: true}] } ]"/>
+            v-decorator="[ 'key', { rules: [ { validator: validateKey, required: true}] } ]"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -22,7 +22,7 @@
           <a-input
             placeholder="请输入"
             name="value"
-            v-decorator="[ 'value', { rules: [ { validator: validateKvConfigValue, required: true}] } ]"/>
+            v-decorator="[ 'value', { rules: [ { validator: validateValue, required: true}] } ]"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -137,7 +137,7 @@ export default {
     onAppIdChange (e) {
       this.query.appId = e
     },
-    validateKvConfigKey  (rule, value, callback) {
+    validateKey  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
         const msg = '请输入key'
         callback(msg)
@@ -148,7 +148,7 @@ export default {
       this.query.key = value
       callback()
     },
-    validateKvConfigValue  (rule, value, callback) {
+    validateValue  (rule, value, callback) {
       if (value === null || value === undefined || value === '') {
         const msg = '请输入value'
         callback(msg)
