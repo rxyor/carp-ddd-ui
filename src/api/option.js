@@ -17,7 +17,7 @@ export function appIdOptions (parameter) {
 
 export function authorityOptions (parameter) {
   return axios({
-    url: api.AppId,
+    url: api.Authority,
     method: 'get',
     params: parameter
   })
