@@ -16,6 +16,22 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
+          label="加密方式"
+          hasFeedback
+        >
+          <a-select
+            showSearch
+            :value="select.passwordEncoder"
+            placeholder="请选择"
+            name="passwordEncoder"
+            @change="onPasswordEncoderChange"
+          >
+            <a-select-option v-for="item in options.passwordEncoderOptionList" :key="item.value" :value="item.value">{{ item.label }}</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
           label="客户端密码"
           hasFeedback
         >
@@ -182,15 +198,17 @@
 
 <script>
 import {
-  VALIDATE_ERROR_MSG,
-  isValidUrlSimple,
+  isValidClientSecret,
   isValidCommonName,
   isValidSimpleCode,
-  isValidClientSecret
+  isValidUrlSimple,
+  VALIDATE_ERROR_MSG
 } from '@/utils/validate'
-import { updateClient, getClientById } from '@/api/client'
+import { getClientById, updateClient } from '@/api/client'
 import { findByKeyAndAppId } from '@/api/kv-config'
-import { authorityOptions } from '@/api/option'
+import { authorityOptions, passwordEncoderOptions } from '@/api/option'
+
+const regexp = /\{[a-zA-z0-9-]+\}/
 
 export default {
   name: 'ClientAdd',
@@ -212,11 +230,16 @@ export default {
         id: undefined
       },
 
+      select: {
+        passwordEncoder: ''
+      },
+
       options: {
         grantTypeConfigs: [],
         autoApproveConfigs: [],
         scopeConfigs: [],
-        authorityOptionList: []
+        authorityOptionList: [],
+        passwordEncoderOptionList: []
       },
 
       resource: { cur: '', last: '', list: [] },
@@ -254,6 +277,7 @@ export default {
         }
 
         const data = Object.assign({}, values)
+        this.select.passwordEncoder = values.clientSecret && values.clientSecret.match(regexp)
         setTimeout(() => {
           this.form.setFieldsValue(data)
         })
@@ -314,6 +338,11 @@ export default {
         const source = { success: false, msg: undefined, data: [] }
         Object.assign(source, res)
         this.options.scopeConfigs = source.data
+      })
+      passwordEncoderOptions().then(res => {
+        const source = { success: false, msg: undefined, data: [] }
+        Object.assign(source, res)
+        this.options.passwordEncoderOptionList = source.data
       })
     },
     fetchAuthorityOptions (keyword) {
@@ -381,6 +410,12 @@ export default {
         return false
       }
       return true
+    },
+    onPasswordEncoderChange (v) {
+      this.select.passwordEncoder = v
+      const data = this.form.getFieldsValue()
+      Object.assign(data, { clientSecret: v + data.clientSecret.replace(regexp, '') })
+      this.form.setFieldsValue(data)
     },
     goBackList () {
       this.$router.push({
