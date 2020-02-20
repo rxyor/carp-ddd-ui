@@ -27,15 +27,31 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="令牌时效(秒)"
+          label="加密方式"
+          hasFeedback
+        >
+          <a-select
+            showSearch
+            :value="select.passwordEncoder"
+            placeholder="请选择"
+            name="passwordEncoder"
+            @change="onPasswordEncoderChange"
+          >
+            <a-select-option v-for="item in options.passwordEncoderOptionList" :key="item.value" :value="item.value">{{ item.label }}</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="令牌时效(小时)"
           hasFeedback
         >
           <a-input-number
-            v-model="query.accessTokenValidity"
+            v-model="accessTokenValidity"
             style="width: 100%"
-            :defaultValue="3600"
-            :min="60"
-            :step="3600"
+            :defaultValue="1"
+            :min="1"
+            :step="1"
             placeholder="请输入"
             name="accessTokenValidity"
           />
@@ -43,15 +59,15 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="刷新令牌时效(秒)"
+          label="刷新令牌时效(天)"
           hasFeedback
         >
           <a-input-number
-            v-model="query.refreshTokenValidity"
+            v-model="refreshTokenValidity"
             style="width: 100%"
-            :defaultValue="3600"
-            :min="60"
-            :step="3600"
+            :defaultValue="1"
+            :min="1"
+            :step="1"
             placeholder="请输入"
             name="refreshTokenValidity"
           />
@@ -182,15 +198,17 @@
 
 <script>
 import {
-  VALIDATE_ERROR_MSG,
-  isValidUrlSimple,
+  isValidClientSecret,
   isValidCommonName,
   isValidSimpleCode,
-  isValidClientSecret
+  isValidUrlSimple,
+  VALIDATE_ERROR_MSG
 } from '@/utils/validate'
 import { saveClient } from '@/api/client'
 import { findByKeyAndAppId } from '@/api/kv-config'
-import { authorityOptions } from '@/api/option'
+import { authorityOptions, passwordEncoderOptions } from '@/api/option'
+
+const regexp = /\{[a-zA-z0-9-]+\}/
 
 export default {
   name: 'ClientAdd',
@@ -208,24 +226,49 @@ export default {
       form: this.$form.createForm(this),
       confirmLoading: false,
 
+      select: {
+        passwordEncoder: '',
+        refreshTokenValidity: 1,
+        accessTokenValidity: 1
+      },
+
       options: {
         grantTypeConfigs: [],
         autoApproveConfigs: [],
         scopeConfigs: [],
-        authorityOptionList: []
+        authorityOptionList: [],
+        passwordEncoderOptionList: []
       },
 
       resource: { cur: '', last: '', list: [] },
       uri: { cur: '', last: '', list: [] },
 
       query: {
-        refreshTokenValidity: 60 * 60 * 24 * 30,
-        accessTokenValidity: 60 * 60 * 24
+        refreshTokenValidity: 86400,
+        accessTokenValidity: 3600
       }
     }
   },
   mounted () {
     this.init()
+  },
+  computed: {
+    accessTokenValidity: {
+      get: function () {
+        return parseInt(this.query.accessTokenValidity / 3600)
+      },
+      set: function (newValue) {
+        this.query.accessTokenValidity = newValue * 3600
+      }
+    },
+    refreshTokenValidity: {
+      get: function () {
+        return parseInt(this.query.refreshTokenValidity / 86400)
+      },
+      set: function (newValue) {
+        this.query.refreshTokenValidity = newValue * 86400
+      }
+    }
   },
   methods: {
     init () {
@@ -277,6 +320,11 @@ export default {
         const source = { success: false, msg: undefined, data: [] }
         Object.assign(source, res)
         this.options.scopeConfigs = source.data
+      })
+      passwordEncoderOptions().then(res => {
+        const source = { success: false, msg: undefined, data: [] }
+        Object.assign(source, res)
+        this.options.passwordEncoderOptionList = source.data
       })
     },
     fetchAuthorityOptions (keyword) {
@@ -344,6 +392,12 @@ export default {
         return false
       }
       return true
+    },
+    onPasswordEncoderChange (v) {
+      this.select.passwordEncoder = v
+      const data = this.form.getFieldsValue()
+      Object.assign(data, { clientSecret: v + data.clientSecret.replace(regexp, '') })
+      this.form.setFieldsValue(data)
     },
     goBackList () {
       this.$router.push({

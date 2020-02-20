@@ -11,7 +11,8 @@
           <a-input
             placeholder="请输入"
             name="clientId"
-            v-decorator="[ 'clientId', { rules: [ { required:true, validator: validateClientId, }] } ]"/>
+            v-decorator="[ 'clientId', { rules: [ { required:true, validator: validateClientId, }] } ]"
+            disabled="disabled"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -249,7 +250,7 @@ export default {
 
       query: {
         refreshTokenValidity: 86400,
-        accessTokenValidity: 86400 * 30
+        accessTokenValidity: 3600
       },
       record: {}
     }
@@ -260,7 +261,7 @@ export default {
   computed: {
     accessTokenValidity: {
       get: function () {
-        return this.query.accessTokenValidity / 3600
+        return parseInt(this.query.accessTokenValidity / 3600)
       },
       set: function (newValue) {
         this.query.accessTokenValidity = newValue * 3600
