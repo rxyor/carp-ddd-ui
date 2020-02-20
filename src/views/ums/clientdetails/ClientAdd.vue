@@ -327,7 +327,6 @@ export default {
           const set = new Set(o.list)
           set.add(o.cur)
           o.last = o.cur
-          o.list = []
           o.list = Object.assign([], Array.from(set))
         }
       }
