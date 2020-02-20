@@ -29,8 +29,8 @@ router.beforeEach((to, from, next) => {
   }
 
   /* 拥有token */
-  if (!to.path || to.path === '' || to.path === '/' || to.path === '/user/login') {
-    next({ path: '/dashboard/workplace' })
+  if (!to.path || to.path === '' || to.path === '/user/login') {
+    next({ path: '/' })
     NProgress.done()
     return
   }
