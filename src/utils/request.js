@@ -2,7 +2,6 @@ import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
 import notification from 'ant-design-vue/es/notification'
-import router from '@/router'
 import {
   VueAxios
 } from './axios'
