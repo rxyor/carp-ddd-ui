@@ -6,7 +6,6 @@
           <a-icon type="question-circle-o"></a-icon>
         </span>
       </a>
-      <notice-icon class="action"/>
       <a-dropdown>
         <span class="action ant-dropdown-link user-dropdown-menu">
           <a-avatar class="avatar" size="small" :src="avatar()"/>
@@ -38,9 +37,6 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'UserMenu',
-  components: {
-    NoticeIcon
-  },
   methods: {
     ...mapActions(['Logout']),
     ...mapGetters(['nickname', 'avatar']),
