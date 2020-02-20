@@ -43,15 +43,15 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="令牌时效(秒)"
+          label="令牌时效(小时)"
           hasFeedback
         >
           <a-input-number
-            v-model="query.accessTokenValidity"
+            v-model="accessTokenValidity"
             style="width: 100%"
-            :defaultValue="3600"
-            :min="60"
-            :step="3600"
+            :defaultValue="1"
+            :min="1"
+            :step="1"
             placeholder="请输入"
             name="accessTokenValidity"
           />
@@ -59,15 +59,15 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="刷新令牌时效(秒)"
+          label="刷新令牌时效(天)"
           hasFeedback
         >
           <a-input-number
-            v-model="query.refreshTokenValidity"
+            v-model="refreshTokenValidity"
             style="width: 100%"
-            :defaultValue="3600"
-            :min="60"
-            :step="3600"
+            :defaultValue="1"
+            :min="1"
+            :step="1"
             placeholder="请输入"
             name="refreshTokenValidity"
           />
@@ -231,7 +231,9 @@ export default {
       },
 
       select: {
-        passwordEncoder: ''
+        passwordEncoder: '',
+        refreshTokenValidity: 1,
+        accessTokenValidity: 1
       },
 
       options: {
@@ -246,14 +248,32 @@ export default {
       uri: { cur: '', last: '', list: [] },
 
       query: {
-        refreshTokenValidity: 60 * 60 * 24 * 30,
-        accessTokenValidity: 60 * 60 * 24
+        refreshTokenValidity: 86400,
+        accessTokenValidity: 86400 * 30
       },
       record: {}
     }
   },
   mounted () {
     this.init()
+  },
+  computed: {
+    accessTokenValidity: {
+      get: function () {
+        return this.query.accessTokenValidity / 3600
+      },
+      set: function (newValue) {
+        this.query.accessTokenValidity = newValue * 3600
+      }
+    },
+    refreshTokenValidity: {
+      get: function () {
+        return this.query.refreshTokenValidity / 86400
+      },
+      set: function (newValue) {
+        this.query.refreshTokenValidity = newValue * 86400
+      }
+    }
   },
   methods: {
     init () {

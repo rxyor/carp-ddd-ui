@@ -31,9 +31,15 @@
             </a-col>
           </template>
           <a-col :md="!advanced && 8 || 24" :sm="24">
-            <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
+            <span
+              class="table-page-search-submitButtons"
+              :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
               <a-button type="primary" icon="plus" @click="handleAdd()">新建</a-button>
-              <a-button style="margin-left: 8px" type="primary" icon="search"@click="$refs.table.refresh(true)">查询</a-button>
+              <a-button
+                style="margin-left: 8px"
+                type="primary"
+                icon="search"
+                @click="$refs.table.refresh(true)">查询</a-button>
               <a-button style="margin-left: 8px" @click="() => query = {}">重置</a-button>
               <a @click="toggleAdvanced" style="margin-left: 8px">
                 {{ advanced ? '收起' : '展开' }}
@@ -64,7 +70,9 @@
               <span>授权类型：</span>
             </a-col>
             <a-col :lg="20" :md="24" v-if="record.authorizedGrantTypeList.length > 0">
-              <a-tag color="cyan" v-for="(grantType, k) in record.authorizedGrantTypeList" :key="k">{{ grantType }}</a-tag>
+              <a-tag color="cyan" v-for="(grantType, k) in record.authorizedGrantTypeList" :key="k">{{
+                grantType }}
+              </a-tag>
             </a-col>
             <a-col :span="20" v-else>-</a-col>
           </a-col>
@@ -73,7 +81,9 @@
               <span>资源ID：</span>
             </a-col>
             <a-col :lg="20" :md="24" v-if="record.resourceIdList.length > 0">
-              <a-tag color="cyan" v-for="(resourceId, k) in record.resourceIdList" :key="k">{{ resourceId }}</a-tag>
+              <a-tag color="cyan" v-for="(resourceId, k) in record.resourceIdList" :key="k">{{ resourceId
+              }}
+              </a-tag>
             </a-col>
             <a-col :span="20" v-else>-</a-col>
           </a-col>
@@ -91,7 +101,9 @@
               <span>权限：</span>
             </a-col>
             <a-col :lg="20" :md="24" v-if="record.authorityList.length > 0">
-              <a-tag color="cyan" v-for="(authority, k) in record.authorityList" :key="k">{{ authority }}</a-tag>
+              <a-tag color="cyan" v-for="(authority, k) in record.authorityList" :key="k">{{ authority
+              }}
+              </a-tag>
             </a-col>
             <a-col :span="20" v-else>-</a-col>
           </a-col>
@@ -100,7 +112,8 @@
               <span>跳转URL：</span>
             </a-col>
             <a-col :lg="20" :md="24" v-if="record.webServerRedirectUriList">
-              <a-tag color="cyan" v-for="(uri, k) in record.webServerRedirectUriList" :key="k">{{ uri }}</a-tag>
+              <a-tag color="cyan" v-for="(uri, k) in record.webServerRedirectUriList" :key="k">{{ uri }}
+              </a-tag>
             </a-col>
             <a-col :span="20" v-else>-</a-col>
           </a-col>
@@ -108,7 +121,7 @@
       </div>
       <span slot="action" slot-scope="text, record">
         <a @click="handleEdit(record)">编辑</a>
-        <a-divider type="vertical" />
+        <a-divider type="vertical"/>
         <a style="color: red" @click="handleDelete(record.id)">删除</a>
       </span>
     </s-table>
@@ -163,7 +176,20 @@ export default {
           key: 'accessTokenValidity',
           customRender: (text) => {
             if (text) {
-              return text + '秒'
+              const days = parseInt(text / 86400)
+              const hours = parseInt((text % 86400) / 3600)
+              const seconds = (text % 3600)
+              let s = ''
+              if (days > 0) {
+                s += days + '天'
+              }
+              if (hours > 0) {
+                s += hours + '小时'
+              }
+              if (seconds > 0) {
+                s += seconds + '秒'
+              }
+              return s
             } else {
               return '不限'
             }
@@ -175,7 +201,20 @@ export default {
           key: 'refreshTokenValidity',
           customRender: (text) => {
             if (text) {
-              return text + '秒'
+              const days = parseInt(text / 86400)
+              const hours = parseInt((text % 86400) / 3600)
+              const seconds = (text % 3600)
+              let s = ''
+              if (days > 0) {
+                s += days + '天'
+              }
+              if (hours > 0) {
+                s += hours + '小时'
+              }
+              if (seconds > 0) {
+                s += seconds + '秒'
+              }
+              return s
             } else {
               return '不限'
             }
@@ -197,7 +236,11 @@ export default {
         Object.assign(this.query, { page: param.pageNo, pageSize: param.pageSize })
 
         return clientPage(this.query).then(res => {
-          const source = { success: false, msg: undefined, data: { content: [], totalPages: 1, totalElements: 0, size: 0, number: 0 } }
+          const source = {
+            success: false,
+            msg: undefined,
+            data: { content: [], totalPages: 1, totalElements: 0, size: 0, number: 0 }
+          }
           Object.assign(source, res)
           if (!source.success) {
             this.$message.error('请求数据失败')
@@ -206,7 +249,13 @@ export default {
           const data = source.data
 
           const ret = { pageNo: 1, pageSize: 10, totalCount: 0, totalPage: 1, data: [] }
-          Object.assign(ret, { pageNo: data.number + 1, pageSize: data.size, totalCount: data.totalElements, totalPage: data.totalPages, data: data.content })
+          Object.assign(ret, {
+            pageNo: data.number + 1,
+            pageSize: data.size,
+            totalCount: data.totalElements,
+            totalPage: data.totalPages,
+            data: data.content
+          })
           return ret
         })
       }
