@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import NoticeIcon from '@/components/NoticeIcon'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
