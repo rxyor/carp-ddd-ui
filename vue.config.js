@@ -89,18 +89,6 @@ module.exports = {
     // development server port 8000
     port: 8000,
     proxy: {
-      // '/api/oauth2/*': {
-      //   target: 'http://carp-auth:8002',
-      //   ws: false,
-      //   changeOrigin: true,
-      //   pathRewrite: { '^/api': '' }
-      // },
-      // '/api/ums/*': {
-      //   target: 'http:///carp-ums:8001',
-      //   ws: false,
-      //   changeOrigin: true,
-      //   pathRewrite: { '^/api': '' }
-      // },
       '/api/*': {
         target: 'http://carp-gateway:8999',
         ws: false,
