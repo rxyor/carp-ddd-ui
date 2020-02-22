@@ -87,9 +87,19 @@ const user = {
           }
           resolve()
         }).catch(() => {
+          commit('SET_TOKEN', '')
+          commit('SET_INFO', undefined)
+          Vue.ls.remove(ACCESS_TOKEN)
           resolve()
         })
       })
+    },
+
+    // 清除TOKEN
+    ClearToken ({ commit, state }) {
+      commit('SET_TOKEN', '')
+      commit('SET_INFO', {})
+      Vue.ls.remove(ACCESS_TOKEN)
     }
 
   }

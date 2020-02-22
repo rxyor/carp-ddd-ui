@@ -1,0 +1,4 @@
+export const BizCode = {
+  USERNAME_PASSWORD_ERROR: 5401,
+  LOGIN_TIMEOUT: 5411
+}

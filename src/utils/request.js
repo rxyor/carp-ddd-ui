@@ -2,6 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
 import notification from 'ant-design-vue/es/notification'
+import { BizCode } from '@/utils/bizCode'
 import {
   VueAxios
 } from './axios'
@@ -11,7 +12,7 @@ import {
 
 const service = axios.create({
   baseURL: '/api',
-  timeout: 6000
+  timeout: 5000
 })
 
 // 错误处理
@@ -21,21 +22,14 @@ const err = (error) => {
     Object.assign(data, error.response.data, { status: error.response.status })
 
     if (data.status === 500) {
-      notification.error({ message: '错误', description: '请求服务器失败' })
+      notification.error({ message: '错误', description: '服务正在部署或升级, 请稍后' })
     } else if (data.status === 404) {
       notification.error({ message: '错误', description: '请求路径不存在' })
     } else if (data.status === 403) {
       console.error({ msg: '无权访问', err: data })
-    } else if (data.status === 401) {
-      console.error({ msg: '无权访问', err: data })
-      const token = Vue.ls.get(ACCESS_TOKEN)
-      if (token) {
-        store.dispatch('Logout').then(() => {
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
-        })
-      }
+    } else if (data.status === 401 || data.code === 401) {
+      console.error({ msg: '身份鉴定失败', err: data })
+      store.dispatch('ClearToken')
     } else if (data.status !== 200) {
       console.error({ msg: '请求失败', err: data })
     }
@@ -44,11 +38,13 @@ const err = (error) => {
       console.error({ msg: '业务请求失败', err: data })
       const msg = data.msg || '业务请求失败'
       notification.error({ message: '错误', description: msg })
-      if (data.code === 401) {
-        store.dispatch('Logout').then(() => {
+
+      // 登录超时
+      if (data.code === BizCode.LOGIN_TIMEOUT) {
+        store.dispatch('ClearToken').then(() => {
           setTimeout(() => {
             window.location.reload()
-          }, 1500)
+          }, 1000)
         })
       }
     }
